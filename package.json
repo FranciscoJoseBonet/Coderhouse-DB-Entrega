@@ -1,0 +1,24 @@
+{
+  "name": "coder-db-i-entrega",
+  "version": "1.0.0",
+  "description": "API de entrega para curso de DB I de coderhouse",
+  "homepage": "https://github.com/FranciscoJoseBonet/Coderhouse-DB-Entrega#readme",
+  "bugs": {
+    "url": "https://github.com/FranciscoJoseBonet/Coderhouse-DB-Entrega/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FranciscoJoseBonet/Coderhouse-DB-Entrega.git"
+  },
+  "license": "ISC",
+  "author": "Francisco Bonet",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "nodemon": "^3.1.10"
+  }
+}
