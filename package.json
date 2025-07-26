@@ -12,8 +12,8 @@
 	},
 	"license": "ISC",
 	"author": "Francisco Bonet",
-	"type": "commonjs",
-	"main": "module",
+	"type": "module",
+	"main": "index.js",
 	"scripts": {
 		"dev": "nodemon src/app.js"
 	},

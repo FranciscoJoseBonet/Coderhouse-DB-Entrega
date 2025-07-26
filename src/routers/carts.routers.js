@@ -33,7 +33,6 @@ router.post("/:cid/product/:pid", async (req, res) => {
 	res.json(result);
 });
 
-// Eliminar un carrito
 router.delete("/:cid", async (req, res) => {
 	const cid = Number(req.params.cid);
 	const deleted = await cartManager.deleteCart(cid);
