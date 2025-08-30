@@ -1,12 +1,12 @@
 [
-  {
-    "id": 1,
-    "title": "Teclado Mecánico",
-    "description": "Teclado con switches rojos",
-    "code": "TEC123",
-    "price": 150,
-    "status": true,
-    "stock": 25,
-    "category": "Periféricos"
-  }
+	{
+		"_id": 1,
+		"title": "Teclado Mecánico",
+		"description": "Teclado con switches rojos",
+		"code": "TEC123",
+		"price": 150,
+		"status": true,
+		"stock": 25,
+		"category": "Periféricos"
+	}
 ]

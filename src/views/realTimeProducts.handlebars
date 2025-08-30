@@ -1,0 +1,41 @@
+<h1>Real-Time Products</h1>
+
+<section>
+	<h2>Product List</h2>
+	<ul id="prodList"></ul>
+</section>
+
+<section>
+	<h2>Add Product</h2>
+	<form id="createForm">
+		<div class="fila">
+			<label for="name">Name</label>
+			<input id="name" name="name" type="text" placeholder="Name" required />
+
+			<label for="price">Price</label>
+			<input
+				id="price"
+				name="price"
+				type="number"
+				step="0.01"
+				placeholder="Price"
+				required
+			/>
+		</div>
+		<button type="submit">Add</button>
+	</form>
+</section>
+
+<section>
+	<h2>Delete Product</h2>
+	<form id="deleteForm">
+		<label for="prodId">Product ID</label>
+		<input id="prodId" name="prodId" type="text" placeholder="Product ID" required />
+		<button type="submit">Delete</button>
+	</form>
+</section>
+
+<p><a href="/">Go Home</a></p>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/realtime.js"></script>
