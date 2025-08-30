@@ -2,21 +2,23 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Real-Time Products</title>
+		<title>{{title}}</title>
 		<style>
-			body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-			background-color: #f4f6f8; color: #333; margin: 0; padding: 20px; } h1 { text-align:
-			center; color: #2c3e50; margin-bottom: 30px; } section { background-color: #fff;
-			padding: 20px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 4px 8px
-			rgba(0,0,0,0.05); } h2 { margin-top: 0; color: #34495e; } ul#prodList { list-style:
-			none; padding: 0; } ul#prodList li { padding: 10px; border-bottom: 1px solid #eee; }
-			form { display: flex; flex-direction: column; gap: 10px; } .fila { display: flex;
-			gap: 10px; flex-wrap: wrap; } label { font-weight: bold; } input { padding: 8px;
-			border: 1px solid #ccc; border-radius: 6px; flex: 1; } button { background-color:
-			#3498db; color: #fff; border: none; padding: 10px 15px; border-radius: 6px; cursor:
-			pointer; font-size: 1rem; transition: background-color 0.2s; } button:hover {
-			background-color: #2980b9; } p { text-align: center; } a { color: #3498db;
-			text-decoration: none; font-weight: bold; } a:hover { text-decoration: underline; }
+			body { font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background:#f4f6f8; color:#333; margin:0; padding:20px; } h1,h2 { text-align:center;
+			color:#2c3e50; margin-bottom:20px; } section { background:#fff; padding:20px;
+			margin-bottom:20px; border-radius:10px; box-shadow:0 4px 8px rgba(0,0,0,0.05); }
+			ul#prodList { list-style:none; padding:0; } ul#prodList li { padding:15px;
+			margin-bottom:10px; border-bottom:1px solid #eee; display:flex;
+			flex-direction:column; gap:8px; } li .title { font-weight:bold; color:#34495e; } li
+			.description { color:#555; } li .meta { font-size:0.9rem; color:#7f8c8d; } li .price
+			{ color:#27ae60; font-weight:bold; } form { display:flex; flex-direction:column;
+			gap:10px; } .fila { display:flex; gap:10px; flex-wrap:wrap; } input { padding:8px;
+			border:1px solid #ccc; border-radius:6px; flex:1; } button { background:#3498db;
+			color:#fff; border:none; padding:10px 15px; border-radius:6px; cursor:pointer;
+			transition:0.2s; } button:hover { background:#2980b9; } a { display:block;
+			text-align:center; margin-top:20px; color:#3498db; text-decoration:none;
+			font-weight:bold; } a:hover { text-decoration:underline; }
 		</style>
 	</head>
 	<body>
@@ -24,7 +26,7 @@
 		<h1>Real-Time Products</h1>
 
 		<section>
-			<h2>Product List</h2>
+			<h2>Products List</h2>
 			<ul id="prodList"></ul>
 		</section>
 
@@ -33,8 +35,24 @@
 			<form id="createForm">
 				<div class="fila">
 					<div>
-						<label for="name">Name</label>
-						<input id="name" name="name" type="text" placeholder="Name" required />
+						<label for="title">Title</label>
+						<input id="title" name="title" type="text" placeholder="Title" required />
+					</div>
+					<div>
+						<label for="description">Description</label>
+						<input
+							id="description"
+							name="description"
+							type="text"
+							placeholder="Description"
+						/>
+					</div>
+				</div>
+
+				<div class="fila">
+					<div>
+						<label for="code">Code</label>
+						<input id="code" name="code" type="text" placeholder="Code" required />
 					</div>
 					<div>
 						<label for="price">Price</label>
@@ -48,6 +66,34 @@
 						/>
 					</div>
 				</div>
+
+				<div class="fila">
+					<div>
+						<label for="stock">Stock</label>
+						<input id="stock" name="stock" type="number" placeholder="Stock" required />
+					</div>
+					<div>
+						<label for="category">Category</label>
+						<input
+							id="category"
+							name="category"
+							type="text"
+							placeholder="Category"
+							required
+						/>
+					</div>
+				</div>
+
+				<div class="fila">
+					<div>
+						<label for="status">Status</label>
+						<select id="status" name="status">
+							<option value="true" selected>Active</option>
+							<option value="false">Inactive</option>
+						</select>
+					</div>
+				</div>
+
 				<button type="submit">Add</button>
 			</form>
 		</section>
@@ -64,7 +110,7 @@
 		<p><a href="/">Go Home</a></p>
 
 		<script src="/socket.io/socket.io.js"></script>
-		<script src="/js/realtime.js"></script>
+		<script src="../js/realTimeScript.js"></script>
 
 	</body>
 </html>

@@ -22,7 +22,7 @@ class ProductManager {
 
 	async getProductById(_id) {
 		const products = await this.getProducts();
-		return products.find((prod) => prod.id === _id) || null;
+		return products.find((prod) => prod._id === _id) || null;
 	}
 
 	async addProduct(productData) {
@@ -42,12 +42,12 @@ class ProductManager {
 			return { error: "Product code already exists" };
 		}
 
-		const newId = products.length > 0 ? products.at(-1).id + 1 : 1;
+		const newId = products.length > 0 ? products.at(-1)._id + 1 : 1;
 
 		const newProduct = {
-			id: newId,
+			_id: newId,
 			title: productData.title,
-			description: productData.description,
+			description: productData.description ?? "",
 			code: productData.code,
 			price: productData.price,
 			status: productData.status ?? true,
@@ -57,15 +57,16 @@ class ProductManager {
 
 		products.push(newProduct);
 		await fs.writeFile(this.path, JSON.stringify(products, null, 2), "utf-8");
+		console.log("Product added:", newProduct);
 		return newProduct;
 	}
 
 	async updateProduct(_id, updates) {
 		const products = await this.getProducts();
-		const index = products.findIndex((prod) => prod.id === _id);
-		if (index === -1) return { error: "id out of range" };
+		const index = products.findIndex((prod) => prod._id === _id);
+		if (index === -1) return { error: "Product not found" };
 
-		delete updates.id;
+		delete updates._id;
 		products[index] = { ...products[index], ...updates };
 		await fs.writeFile(this.path, JSON.stringify(products, null, 2), "utf-8");
 		return products[index];
@@ -73,7 +74,7 @@ class ProductManager {
 
 	async deleteProduct(_id) {
 		const products = await this.getProducts();
-		const index = products.findIndex((p) => p.id === _id);
+		const index = products.findIndex((p) => p._id === _id);
 		if (index === -1) return { error: "Product not found" };
 
 		const deleted = products.splice(index, 1)[0];

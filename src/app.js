@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 
 import productsRouter from "./routers/products.routers.js";
 import cartsRouter from "./routers/carts.routers.js";
-import { createViewsRouter } from "../src/routers/views.routers.js";
+import { createViewsRouter } from "./routers/views.routers.js"; // ajusté la ruta
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,6 +15,7 @@ const app = express();
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use((req, res, next) => {
@@ -28,7 +29,6 @@ app.set("views", path.join(__dirname, "views"));
 
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
-
 app.use("/", createViewsRouter());
 
 app.use((req, res) => {
