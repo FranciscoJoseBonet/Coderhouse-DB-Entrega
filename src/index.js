@@ -14,24 +14,20 @@ const productManager = new ProductManager(
 io.on("connection", async (socket) => {
 	console.log("Client connected");
 
-	// Enviar lista inicial
 	socket.emit("products:list", await productManager.getProducts());
 
-	// Crear producto
 	socket.on("product:create", async (data) => {
 		const created = await productManager.addProduct(data);
 		io.emit("products:list", await productManager.getProducts());
 		socket.emit("product:created", created);
 	});
 
-	// Borrar producto
 	socket.on("product:delete", async (productId) => {
 		const deleted = await productManager.deleteProduct(productId);
 		io.emit("products:list", await productManager.getProducts());
 		socket.emit("product:deleted", deleted);
 	});
 
-	// Actualizar producto
 	socket.on("product:update", async ({ id, updates }) => {
 		const updated = await productManager.updateProduct(id, updates);
 		io.emit("products:list", await productManager.getProducts());
@@ -41,7 +37,7 @@ io.on("connection", async (socket) => {
 	socket.on("addProduct", async (product) => {
 		await productManager.addProduct(product);
 		const products = await productManager.getProducts();
-		io.emit("products", products); // Emitir lista actualizada
+		io.emit("products", products);
 	});
 });
 
