@@ -12,15 +12,19 @@
 
 						<ul>
 							{{#each this.products}}
-								<li style="margin-left: 30px;">
-									<div><strong>{{this.product.title}}</strong></div>
-									<div class="meta">ID:
-										{{this.product._id}}
-										| Código:
-										{{this.product.code}}</div>
-									<div class="price">Precio: ${{this.product.price}}</div>
-									<div>Cantidad: {{this.quantity}}</div>
-								</li>
+								{{#if product}}
+									<li style="margin-left: 30px;">
+										<div><strong>{{this.product.title}}</strong></div>
+										<div class="meta">ID:
+											{{this.product._id}}
+											| Código:
+											{{this.product.code}}</div>
+										<div class="price">Precio: ${{this.product.price}}</div>
+										<div>Cantidad: {{this.quantity}}</div>
+									</li>
+
+								{{else}}
+								{{/if}}
 							{{/each}}
 						</ul>
 					</a>

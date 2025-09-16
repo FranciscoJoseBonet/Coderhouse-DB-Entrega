@@ -4,46 +4,51 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>{{title}}</title>
 		<style>
-			body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
-			#f0f2f5; color: #333; margin: 0; } h1, h2 { text-align: center; color: #2c3e50;
-			margin-bottom: 20px; } section { background: #ffffff; padding: 25px; margin-bottom:
-			25px; border-radius: 12px; box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08); transition:
-			transform 0.2s, box-shadow 0.2s; } section:hover { box-shadow: 0 10px 20px rgba(0,
-			0, 0, 0.12); } ul#prodList { list-style: none; padding: 0; margin: 0; display: grid;
-			grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
-			ul#prodList li { padding: 18px 15px; display: flex; flex-direction: column; gap:
-			6px; background: #fafafa; border-radius: 8px; box-shadow: 0 3px 10px
-			rgba(0,0,0,0.05); transition: transform 0.2s, box-shadow 0.2s, background 0.2s; }
-			ul#prodList li:hover { background: #f1f6fc; transform: translateY(-3px); box-shadow:
-			0 10px 20px rgba(0,0,0,0.12); } li .title { font-weight: 600; color: #34495e;
-			font-size: 1.05rem; } li .description { color: #555; font-size: 0.95rem; } li .meta
-			{ font-size: 0.85rem; color: #7f8c8d; display: flex; flex-wrap: wrap; gap: 8px; } li
-			.price { color: #27ae60; font-weight: 700; font-size: 1rem; } .pagination {
-			text-align: center !important; display: flex !important; justify-content:
-			space-around !important; align-items: center; margin-top: 15px; } .pagination a,
-			.pagination span { padding: 8px 14px; border-radius: 6px; border: 1px solid #3498db;
-			text-decoration: none; font-weight: 600; transition: all 0.2s; display:
-			inline-block; min-width: 45px; text-align: center; } .pagination a { color: #3498db;
-			background: white; } .pagination a:hover { background: #3498db; color: white;
-			transform: translateY(-2px); } .pagination span { color: #2c3e50; background:
-			#ecf0f1; } .pagination .active { background: #3498db; color: white; border-color:
-			#2980b9; } form { display: flex; flex-direction: column; gap: 15px; } .fila {
-			display: flex; gap: 15px; flex-wrap: wrap; } .fila > div { flex: 1 1 200px; display:
-			flex; flex-direction: column; } input, select { padding: 10px 12px; border: 1px
-			solid #ccc; border-radius: 8px; font-size: 0.95rem; transition: border 0.2s,
-			box-shadow 0.2s; width: 100%; box-sizing: border-box; } input:focus, select:focus {
-			border-color: #3498db; box-shadow: 0 0 5px rgba(52, 152, 219, 0.3); outline: none; }
-			button { background: #3498db; color: #fff; border: none; padding: 12px 0;
-			border-radius: 8px; cursor: pointer; font-weight: 600; transition: background 0.2s,
-			transform 0.1s; width: 150px; align-self: flex-end; } button:hover { background:
-			#2980b9; transform: translateY(-1px); } a { display: block; text-align: center;
-			margin-top: 25px; color: #3498db; text-decoration: none; font-weight: 600;
-			transition: color 0.2s; } a:hover { color: #2980b9; text-decoration: underline; }
+			body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background:#f0f2f5; color: #333; margin:0; }
+			h1,h2{text-align:center;color:#2c3e50;margin-bottom:20px;}
+			section{background:#fff;padding:25px;margin-bottom:25px;border-radius:12px;box-shadow:0
+			6px 15px rgba(0,0,0,0.08);transition:transform 0.2s, box-shadow 0.2s;}
+			section:hover{box-shadow:0 10px 20px rgba(0,0,0,0.12);}
+			ul#prodList{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:15px;}
+			ul#prodList li{padding:18px
+			15px;display:flex;flex-direction:column;gap:6px;background:#fafafa;border-radius:8px;box-shadow:0
+			3px 10px rgba(0,0,0,0.05);transition:transform 0.2s,box-shadow 0.2s,background
+			0.2s;} ul#prodList
+			li:hover{background:#f1f6fc;transform:translateY(-3px);box-shadow:0 10px 20px
+			rgba(0,0,0,0.12);} .title{font-weight:600;color:#34495e;font-size:1.05rem;}
+			.description{color:#555;font-size:0.95rem;}
+			.meta{font-size:0.85rem;color:#7f8c8d;display:flex;flex-wrap:wrap;gap:8px;}
+			.price{color:#27ae60;font-weight:700;font-size:1rem;}
+			.pagination{text-align:center;display:flex;justify-content:space-around;align-items:center;margin-top:15px;}
+			.pagination a, .pagination span{padding:8px 14px;border-radius:6px;border:1px solid
+			#3498db;text-decoration:none;font-weight:600;transition:all
+			0.2s;display:inline-block;min-width:45px;text-align:center;} .pagination
+			a{color:#3498db;background:white;} .pagination
+			a:hover{background:#3498db;color:white;transform:translateY(-2px);} .pagination
+			span{color:#2c3e50;background:#ecf0f1;} .pagination
+			.active{background:#3498db;color:white;border-color:#2980b9;}
+			form{display:flex;flex-direction:column;gap:15px;}
+			.fila{display:flex;gap:15px;flex-wrap:wrap;} .fila>div{flex:1 1
+			200px;display:flex;flex-direction:column;} input,select{padding:10px 12px;border:1px
+			solid #ccc;border-radius:8px;font-size:0.95rem;transition:border 0.2s, box-shadow
+			0.2s;width:100%;box-sizing:border-box;} input:focus,
+			select:focus{border-color:#3498db;box-shadow:0 0 5px
+			rgba(52,152,219,0.3);outline:none;}
+			button{background:#3498db;color:#fff;border:none;padding:12px
+			0;border-radius:8px;cursor:pointer;font-weight:600;transition:background
+			0.2s,transform 0.1s;width:150px;align-self:flex-end;}
+			button:hover{background:#2980b9;transform:translateY(-1px);}
+			a{display:block;text-align:center;margin-top:25px;color:#3498db;text-decoration:none;font-weight:600;transition:color
+			0.2s;} a:hover{color:#2980b9;text-decoration:underline;} /* Modal */
+			.modal{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;overflow:auto;background:rgba(0,0,0,0.5);}
+			.modal-content{background:#fff;margin:10%
+			auto;padding:20px;border-radius:10px;max-width:600px;position:relative;}
+			.close{position:absolute;top:10px;right:20px;font-size:28px;font-weight:bold;color:#333;cursor:pointer;}
+			.close:hover{color:#e74c3c;}
 		</style>
-
 	</head>
 	<body>
-
 		<h1>Real-Time Products</h1>
 
 		<section>
@@ -70,7 +75,6 @@
 						/>
 					</div>
 				</div>
-
 				<div class="fila">
 					<div>
 						<label for="code">Code</label>
@@ -88,7 +92,6 @@
 						/>
 					</div>
 				</div>
-
 				<div class="fila">
 					<div>
 						<label for="stock">Stock</label>
@@ -105,7 +108,6 @@
 						/>
 					</div>
 				</div>
-
 				<div class="fila">
 					<div>
 						<label for="status">Status</label>
@@ -115,7 +117,6 @@
 						</select>
 					</div>
 				</div>
-
 				<button type="submit">Add</button>
 			</form>
 		</section>
@@ -129,10 +130,96 @@
 			</form>
 		</section>
 
+		<!-- Modal Update -->
+		<div id="updateModal" class="modal">
+			<div class="modal-content">
+				<span id="closeModal" class="close">&times;</span>
+				<h2>Update Product</h2>
+				<form id="updateForm">
+					<input type="hidden" id="updateProdId" name="id" />
+					<div class="fila">
+						<div>
+							<label for="updateTitle">Title</label>
+							<input
+								id="updateTitle"
+								name="title"
+								type="text"
+								placeholder="Title"
+								required
+							/>
+						</div>
+						<div>
+							<label for="updateDescription">Description</label>
+							<input
+								id="updateDescription"
+								name="description"
+								type="text"
+								placeholder="Description"
+							/>
+						</div>
+					</div>
+					<div class="fila">
+						<div>
+							<label for="updateCode">Code</label>
+							<input
+								id="updateCode"
+								name="code"
+								type="text"
+								placeholder="Code"
+								required
+							/>
+						</div>
+						<div>
+							<label for="updatePrice">Price</label>
+							<input
+								id="updatePrice"
+								name="price"
+								type="number"
+								step="0.01"
+								placeholder="Price"
+								required
+							/>
+						</div>
+					</div>
+					<div class="fila">
+						<div>
+							<label for="updateStock">Stock</label>
+							<input
+								id="updateStock"
+								name="stock"
+								type="number"
+								placeholder="Stock"
+								required
+							/>
+						</div>
+						<div>
+							<label for="updateCategory">Category</label>
+							<input
+								id="updateCategory"
+								name="category"
+								type="text"
+								placeholder="Category"
+								required
+							/>
+						</div>
+					</div>
+					<div class="fila">
+						<div>
+							<label for="updateStatus">Status</label>
+							<select id="updateStatus" name="status">
+								<option value="true">Active</option>
+								<option value="false">Inactive</option>
+							</select>
+						</div>
+					</div>
+					<button type="submit">Update</button>
+				</form>
+			</div>
+		</div>
+
 		<p><a href="/">Go Home</a></p>
 
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="../js/realTimeScript.js"></script>
-
 	</body>
 </html>

@@ -3,6 +3,7 @@ const socket = io();
 const prodList = document.getElementById("prodList");
 const paginationDiv = document.getElementById("pagination");
 
+// Renderizar productos con botón Update
 function renderProducts(result) {
 	prodList.innerHTML = "";
 	result.products.forEach((prod) => {
@@ -15,10 +16,17 @@ function renderProducts(result) {
                 <small>ID: ${prod._id}</small> —
                 <small>Code: ${prod.code}</small> —
                 <small>Stock: ${prod.stock}</small> —
-                <small>Category: ${prod.category}</small>
+                <small>Category: ${prod.category}</small> —
+                <small>Status: ${prod.status ? "Active" : "Inactive"}</small>
             </div>
+            <button class="updateBtn" data-id="${prod._id}">Update</button>
         `;
 		prodList.appendChild(li);
+	});
+
+	// Eventos del botón Update
+	document.querySelectorAll(".updateBtn").forEach((btn) => {
+		btn.addEventListener("click", () => openModal(btn.dataset.id, result.products));
 	});
 
 	// Render paginación
@@ -40,11 +48,67 @@ function renderProducts(result) {
 	}
 }
 
-socket.on("products:list", renderProducts);
+// Abrir modal con datos del producto
+function openModal(prodId, products) {
+	const product = products.find((p) => p._id === prodId);
+	if (!product) return;
 
+	document.getElementById("updateProdId").value = product._id;
+	document.getElementById("updateTitle").value = product.title;
+	document.getElementById("updateDescription").value = product.description || "";
+	document.getElementById("updateCode").value = product.code;
+	document.getElementById("updatePrice").value = product.price;
+	document.getElementById("updateStock").value = product.stock;
+	document.getElementById("updateCategory").value = product.category;
+	document.getElementById("updateStatus").value = product.status;
+
+	document.getElementById("updateModal").style.display = "block";
+}
+
+// Cerrar modal
+document.getElementById("closeModal").addEventListener("click", () => {
+	document.getElementById("updateModal").style.display = "none";
+});
+window.addEventListener("click", (e) => {
+	if (e.target == document.getElementById("updateModal")) {
+		document.getElementById("updateModal").style.display = "none";
+	}
+});
+
+// Submit form actualización
+document.getElementById("updateForm").addEventListener("submit", (e) => {
+	e.preventDefault();
+	const id = document.getElementById("updateProdId").value;
+	const data = {
+		title: document.getElementById("updateTitle").value,
+		description: document.getElementById("updateDescription").value,
+		code: document.getElementById("updateCode").value,
+		price: parseFloat(document.getElementById("updatePrice").value),
+		stock: parseInt(document.getElementById("updateStock").value),
+		category: document.getElementById("updateCategory").value,
+		status: document.getElementById("updateStatus").value === "true",
+	};
+
+	socket.emit("product:update", { id, data });
+	document.getElementById("updateModal").style.display = "none";
+
+	// Actualizar en el DOM local
+	const li = document.querySelector(`.updateBtn[data-id="${id}"]`).parentElement;
+	li.querySelector(".title").textContent = data.title;
+	li.querySelector(".description").textContent = data.description || "";
+	li.querySelector(".meta").innerHTML = `
+        <span class="price">$${data.price}</span> —
+        <small>ID: ${id}</small> —
+        <small>Code: ${data.code}</small> —
+        <small>Stock: ${data.stock}</small> —
+        <small>Category: ${data.category}</small> —
+        <small>Status: ${data.status ? "Active" : "Inactive"}</small>
+    `;
+});
+
+// Crear producto
 document.getElementById("createForm").addEventListener("submit", (e) => {
 	e.preventDefault();
-
 	const title = e.target.title.value;
 	const description = e.target.description.value;
 	const code = e.target.code.value;
@@ -65,9 +129,13 @@ document.getElementById("createForm").addEventListener("submit", (e) => {
 	e.target.reset();
 });
 
+// Eliminar producto
 document.getElementById("deleteForm").addEventListener("submit", (e) => {
 	e.preventDefault();
 	const id = e.target.prodId.value.trim();
 	socket.emit("product:delete", id);
 	e.target.reset();
 });
+
+// Escuchar lista de productos
+socket.on("products:list", renderProducts);
