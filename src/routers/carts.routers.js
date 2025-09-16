@@ -85,24 +85,6 @@ router.put("/:cid", async (req, res) => {
 	}
 });
 
-// Eliminar un producto específico del carrito
-// router.delete("/:cid/products/:pid", async (req, res) => {
-// 	try {
-// 		const cart = await Cart.findById(req.params.cid);
-// 		if (!cart) return res.status(404).json({ error: "Cart not found" });
-
-// 		cart.products = cart.products.filter((p) => !p.product.equals(req.params.pid));
-// 		await cart.save();
-
-// 		const populatedCart = await Cart.findById(req.params.cid)
-// 			.populate("products.product")
-// 			.lean();
-// 		res.json(populatedCart);
-// 	} catch (error) {
-// 		res.status(500).json({ error: error.message });
-// 	}
-// });
-
 router.delete("/:cid/products/:pid", removeProductFromCart);
 
 // Vaciar carrito completo
