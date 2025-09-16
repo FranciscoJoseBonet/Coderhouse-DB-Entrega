@@ -3,7 +3,6 @@ const socket = io();
 const prodList = document.getElementById("prodList");
 const paginationDiv = document.getElementById("pagination");
 
-// Renderizar productos con botón Update
 function renderProducts(result) {
 	prodList.innerHTML = "";
 	result.products.forEach((prod) => {
@@ -19,17 +18,33 @@ function renderProducts(result) {
                 <small>Category: ${prod.category}</small> —
                 <small>Status: ${prod.status ? "Active" : "Inactive"}</small>
             </div>
-            <button class="updateBtn" data-id="${prod._id}">Update</button>
-        `;
+			<div styles="margin-top: 10px; display: flex; justify-content: flex-end;">
+            	<button styles='background-color: red' class="deleteBtn" data-id="${
+								prod._id
+							}">Delete</button>
+            	<button class="updateBtn" data-id="${prod._id}">Update</button>
+			</div>
+			`;
 		prodList.appendChild(li);
 	});
 
-	// Eventos del botón Update
 	document.querySelectorAll(".updateBtn").forEach((btn) => {
 		btn.addEventListener("click", () => openModal(btn.dataset.id, result.products));
 	});
 
-	// Render paginación
+	document.querySelectorAll(".deleteBtn").forEach((btn) => {
+		btn.addEventListener("click", () => {
+			if (!confirm("¿Querés eliminar este producto?")) return;
+			try {
+				const prodId = btn.dataset.id;
+				socket.emit("product:delete", prodId);
+				alert("Producto eliminado con exito");
+			} catch (error) {
+				console.error("Error al eliminar el producto: ", error);
+			}
+		});
+	});
+
 	paginationDiv.innerHTML = "";
 	if (result.hasPrevPage) {
 		const prevBtn = document.createElement("button");
