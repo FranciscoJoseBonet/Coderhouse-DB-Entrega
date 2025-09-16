@@ -27,6 +27,7 @@ router.get("/:cid", renderCart);
 // Crear un carrito vacío
 router.post("/", async (req, res) => {
 	try {
+		console.log("Creando un nuevo carrito...");
 		const newCart = await Cart.create({ products: [] });
 		// Retorna el carrito con populate vacío (opcional)
 		const populatedCart = await Cart.findById(newCart._id)

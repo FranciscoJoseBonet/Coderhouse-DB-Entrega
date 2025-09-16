@@ -44,6 +44,9 @@
 	<p>No hay carritos disponibles.</p>
 {{/if}}
 
+<div><button id="createCart" class="createCartBtn" onClick="crearCarrito">Crear nuevo
+		carrito</button></div>
+
 <script>
 	async function vaciarCarrito(cartId){ if(!confirm("¿Querés vaciar este carrito?"))
 	return; try{ const res=await fetch(`/api/carts/${cartId}/empty`,{method:'DELETE'});
@@ -54,7 +57,11 @@
 	return; try{ const res=await fetch(`/api/carts/${cartId}`,{method:'DELETE'}); const
 	data=await res.json(); if(data.success){ alert("Carrito eliminado\ncorrectamente");
 	location.reload(); }else{ alert(data.message||"Error al eliminar el carrito"); }
-	}catch(err){ console.error(err); alert("Error al eliminar el carrito"); } }
+	}catch(err){ console.error(err); alert("Error al eliminar el carrito"); } } //creacion
+	async function crearCarrito(){ try{ const res=await fetch('/api/carts',{method:'POST'});
+	const data=await res.json(); if(data.success){ alert("Carrito creado\ncorrectamente");
+	location.reload(); }else{ alert(data.message||"Error al crear el carrito"); }
+	}catch(err){ console.error(err); alert("Error al crear el carrito"); } }
 </script>
 
 <style>
@@ -65,5 +72,7 @@
 	padding: 10px 15px; border-radius: 8px; font-weight: 600; transition: background 0.2s,
 	transform 0.1s; } button:hover { background: #c0392b; transform: translateY(-2px); }
 	.meta { font-size: 0.85rem; color: #7f8c8d; } .price { color: #27ae60; font-weight: 700;
-	}
+	} .createCartBtn { margin-top: 30px; background: #2ecc71; } .createCartBtn:hover {
+	background: #27ae60; } #createCart { position:fixed; padding: 12px 20px; font-size:
+	1.1rem; bottom:30px; right:30px; box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
 </style>
