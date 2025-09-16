@@ -2,15 +2,23 @@ import express from "express";
 import { engine } from "express-handlebars";
 import path from "path";
 import { fileURLToPath } from "url";
+import mongoose from "mongoose";
 
 import productsRouter from "./routers/products.routers.js";
 import cartsRouter from "./routers/carts.routers.js";
-import { createViewsRouter } from "./routers/views.routers.js"; // ajusté la ruta
+import { createViewsRouter } from "./routers/views.routers.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+
+mongoose
+	.connect(
+		"mongodb+srv://francisco:contrasenia123@cluster0.kzbq1pi.mongodb.net/FinalProjectDB?retryWrites=true&w=majority&appName=Cluster0"
+	)
+	.then(() => console.log("Connected to MongoDB"))
+	.catch((err) => console.error("MongoDB connection error:", err));
 
 // Middlewares
 app.use(express.json());

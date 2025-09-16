@@ -1,11 +1,14 @@
-import ProductManager from "../managers/ProductManager.js";
-
-const productManager = new ProductManager("./data/products.json");
+import productModel from "../models/products.model.js";
 
 export async function showHome(req, res) {
 	try {
-		const products = await productManager.getProducts();
-		res.render("home", { title: "Home", products });
+		//trae los productos desde Mongo
+		const products = await productModel.find();
+		// Renderiza la vista
+		res.render("home", {
+			title: "Home",
+			products: products.map((p) => p.toObject()),
+		});
 	} catch (err) {
 		console.error("Error getting products:", err);
 		res.status(500).send("Internal server error");
