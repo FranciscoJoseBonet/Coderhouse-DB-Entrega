@@ -1,15 +1,27 @@
 import { Router } from "express";
-import { renderCart, renderAllCarts } from "../controllers/carts.controller.js";
+import {
+	addProductToCart,
+	renderCart,
+	renderAllCarts,
+} from "../controllers/carts.controller.js";
 import Cart from "../models/carts.model.js";
-import productModel from "../models/products.model.js";
 
 const router = Router();
 
+router.get("/", renderAllCarts);
+
+router.get("/all-json", async (req, res) => {
+	try {
+		const carts = await Cart.find().lean();
+		res.json(carts);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ error: "Error al obtener los carritos" });
+	}
+});
+
 // Vista de un carrito específico
 router.get("/:cid", renderCart);
-
-// Vista de todos los carritos
-router.get("/", renderAllCarts);
 
 // Crear un carrito vacío
 router.post("/", async (req, res) => {
@@ -26,33 +38,7 @@ router.post("/", async (req, res) => {
 });
 
 // Agregar producto al carrito
-router.post("/:cid/product/:pid", async (req, res) => {
-	try {
-		const cart = await Cart.findById(req.params.cid);
-		if (!cart) return res.status(404).json({ error: "Cart not found" });
-
-		const product = await productModel.findById(req.params.pid);
-		if (!product) return res.status(404).json({ error: "Product not found" });
-
-		const quantity = req.body.quantity ?? 1;
-		const prodIndex = cart.products.findIndex((p) => p.product.equals(product._id));
-
-		if (prodIndex >= 0) {
-			cart.products[prodIndex].quantity += Number(quantity);
-		} else {
-			cart.products.push({ product: product._id, quantity: Number(quantity) });
-		}
-
-		await cart.save();
-
-		const populatedCart = await Cart.findById(req.params.cid)
-			.populate("products.product")
-			.lean();
-		res.json(populatedCart);
-	} catch (error) {
-		res.status(500).json({ error: error.message });
-	}
-});
+router.post("/:cid/product/:pid", addProductToCart);
 
 // Actualizar cantidad de un producto específico
 router.put("/:cid/products/:pid", async (req, res) => {
