@@ -103,13 +103,24 @@ router.delete("/:cid/products/:pid", async (req, res) => {
 });
 
 // Vaciar carrito completo
-router.delete("/:cid", async (req, res) => {
+router.delete("/:cid/empty", async (req, res) => {
 	try {
 		const cart = await Cart.findById(req.params.cid);
 		if (!cart) return res.status(404).json({ error: "Cart not found" });
 
 		cart.products = [];
 		await cart.save();
+		res.json({ success: true });
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
+});
+
+router.delete("/:cid", async (req, res) => {
+	try {
+		const cart = await Cart.findByIdAndDelete(req.params.cid);
+		if (!cart) return res.status(404).json({ error: "Cart not found" });
+
 		res.json({ success: true });
 	} catch (error) {
 		res.status(500).json({ error: error.message });
