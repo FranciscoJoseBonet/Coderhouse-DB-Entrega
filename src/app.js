@@ -6,7 +6,6 @@ import mongoose from "mongoose";
 
 import productsRouter from "./routers/products.routers.js";
 import cartsRouter from "./routers/carts.routers.js";
-// import { createViewsRouter } from "./routers/views.routers.js"; // ya no necesitamos para home
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -26,13 +25,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
-// Logger simple
 app.use((req, res, next) => {
 	console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
 	next();
 });
 
-// Configuración de Handlebars con helpers
 const hbs = create({
 	helpers: {
 		add: (a, b) => a + b,
@@ -48,9 +45,9 @@ app.set("view engine", "handlebars");
 app.set("views", path.join(__dirname, "views"));
 
 // Routers
-app.use("/api/products", productsRouter); // API productos
-app.use("/api/carts", cartsRouter); // API carritos
-app.use("/", productsRouter); // Home renderizado desde productsRouter
+app.use("/api/products", productsRouter);
+app.use("/api/carts", cartsRouter);
+app.use("/", productsRouter);
 
 // 404
 app.use((req, res) => {

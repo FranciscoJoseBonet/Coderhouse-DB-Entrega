@@ -1,6 +1,5 @@
 import productModel from "../models/products.model.js";
 
-// Renderiza la vista home con productos filtrados/paginados
 export const renderHome = async (req, res) => {
 	try {
 		const { category, minPrice, maxPrice, sort, page = 1, limit = 10 } = req.query;
