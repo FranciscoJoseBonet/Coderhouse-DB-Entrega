@@ -1,41 +1,52 @@
-import productModel from "../models/products.model.js";
+import { getProductsService } from "../services/products.service.js";
+
+export const getProducts = async (req, res) => {
+	try {
+		const result = await getProductsService(req.query);
+
+		const baseUrl = `${req.protocol}://${req.get("host")}${req.baseUrl}${req.path}`;
+		const buildLink = (targetPage) => {
+			const params = new URLSearchParams();
+			if (targetPage) params.set("page", targetPage);
+			if (req.query.limit) params.set("limit", result.limit);
+			if (req.query.sort) params.set("sort", result.filters.sort);
+			if (req.query.query) params.set("query", result.filters.query);
+			if (req.query.minPrice) params.set("minPrice", result.filters.minPrice);
+			if (req.query.maxPrice) params.set("maxPrice", result.filters.maxPrice);
+			return `${baseUrl}?${params.toString()}`;
+		};
+
+		res.json({
+			status: "success",
+			payload: result.products,
+			totalPages: result.totalPages,
+			prevPage: result.prevPage,
+			nextPage: result.nextPage,
+			page: result.page,
+			hasPrevPage: result.hasPrevPage,
+			hasNextPage: result.hasNextPage,
+			prevLink: result.hasPrevPage ? buildLink(result.prevPage) : null,
+			nextLink: result.hasNextPage ? buildLink(result.nextPage) : null,
+		});
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ status: "error", error: error.message });
+	}
+};
 
 export const renderHome = async (req, res) => {
 	try {
-		const { category, minPrice, maxPrice, sort, page = 1, limit = 10 } = req.query;
-
-		// Filtro dinámico
-		let filter = {};
-		if (category) filter.category = category;
-		if (minPrice) filter.price = { ...filter.price, $gte: Number(minPrice) };
-		if (maxPrice) filter.price = { ...filter.price, $lte: Number(maxPrice) };
-
-		// Orden
-		let sortOption = {};
-		if (sort === "priceAsc") sortOption.price = 1;
-		if (sort === "priceDesc") sortOption.price = -1;
-
-		// Paginado
-		const skip = (Number(page) - 1) * Number(limit);
-
-		const productsDocs = await productModel
-			.find(filter)
-			.sort(sortOption)
-			.skip(skip)
-			.limit(Number(limit));
-		const products = productsDocs.map((p) => p.toObject());
-
-		const total = await productModel.countDocuments(filter);
-		const totalPages = Math.ceil(total / limit);
+		const result = await getProductsService(req.query);
 
 		res.render("home", {
-			products,
-			page: Number(page),
-			totalPages,
-			limit: Number(limit),
-			filters: { category, minPrice, maxPrice, sort },
+			title: "Home",
+			products: result.products,
+			filters: result.filters,
+			page: result.page,
+			totalPages: result.totalPages,
 		});
 	} catch (error) {
+		console.error(error);
 		res.status(500).send("Error al renderizar la página: " + error.message);
 	}
 };

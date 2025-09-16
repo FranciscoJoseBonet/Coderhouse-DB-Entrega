@@ -27,17 +27,21 @@
 
 	<h1>Products List</h1>
 
-	<form method="get">
-		<input type="text" name="category" placeholder="Category" value="{{filters.category}}">
-		<input type="number" name="minPrice" placeholder="Min Price" value="{{filters.minPrice}}">
-		<input type="number" name="maxPrice" placeholder="Max Price" value="{{filters.maxPrice}}">
-		<select name="sort">
-			<option value="">Sort By</option>
-			<option value="priceAsc" {{#ifEquals filters.sort "priceAsc"}}selected{{/ifEquals}}>Price Ascending</option>
-			<option value="priceDesc" {{#ifEquals filters.sort "priceDesc"}}selected{{/ifEquals}}>Price Descending</option>
-		</select>
-		<button type="submit">Filter</button>
-	</form>
+	<form method="get" action="/api/products">
+  <input type="text" name="query" placeholder="Category" value="{{filters.query}}">
+
+  <input type="number" name="minPrice" placeholder="Min Price" value="{{filters.minPrice}}">
+  <input type="number" name="maxPrice" placeholder="Max Price" value="{{filters.maxPrice}}">
+
+  <select name="sort">
+    <option value="">Sort By</option>
+    <option value="asc" {{#ifEquals filters.sort "asc"}}selected{{/ifEquals}}>Price Ascending</option>
+    <option value="desc" {{#ifEquals filters.sort "desc"}}selected{{/ifEquals}}>Price Descending</option>
+  </select>
+
+  <button type="submit">Filter</button>
+</form>
+
 
 	{{#if products.length}}
 		<ul>
@@ -57,16 +61,21 @@
 		</ul>
 
 		<div class="pagination">
-			{{#if (gt page 1)}}
-				<a href="?page={{subtract page 1}}&category={{filters.category}}&minPrice={{filters.minPrice}}&maxPrice={{filters.maxPrice}}&sort={{filters.sort}}">Previous</a>
-			{{/if}}
+  {{#if (gt page 1)}}
+    <a href="?page={{subtract page 1}}&query={{filters.query}}&minPrice={{filters.minPrice}}&maxPrice={{filters.maxPrice}}&sort={{filters.sort}}">
+      Previous
+    </a>
+  {{/if}}
 
-			<span>Page {{page}} of {{totalPages}}</span>
+  <span>Page {{page}} of {{totalPages}}</span>
 
-			{{#if (lt page totalPages)}}
-				<a href="?page={{add page 1}}&category={{filters.category}}&minPrice={{filters.minPrice}}&maxPrice={{filters.maxPrice}}&sort={{filters.sort}}">Next</a>
-			{{/if}}
-		</div>
+  {{#if (lt page totalPages)}}
+    <a href="?page={{add page 1}}&query={{filters.query}}&minPrice={{filters.minPrice}}&maxPrice={{filters.maxPrice}}&sort={{filters.sort}}">
+      Next
+    </a>
+  {{/if}}
+</div>
+
 
 	{{else}}
 		<p>No products available.</p>
