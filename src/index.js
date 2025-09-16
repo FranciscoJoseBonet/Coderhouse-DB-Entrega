@@ -29,6 +29,12 @@ io.on("connection", async (socket) => {
 		const result = await getProductsService({ limit: 6, page: 1 });
 		io.emit("products:list", result);
 	});
+
+	socket.on("product:update", async ({ id, data }) => {
+		await productModel.findByIdAndUpdate(id, data, { new: true });
+		const result = await getProductsService({ limit: 6, page: 1 });
+		io.emit("products:list", result);
+	});
 });
 
 const port = process.env.PORT || 8080;
