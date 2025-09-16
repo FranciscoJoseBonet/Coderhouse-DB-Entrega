@@ -1,30 +1,31 @@
 import { Router } from "express";
-import { renderCart } from "../controllers/carts.controller.js";
+import { renderCart, renderAllCarts } from "../controllers/carts.controller.js";
 import Cart from "../models/carts.model.js";
 import productModel from "../models/products.model.js";
 
 const router = Router();
 
-router.get("/", async (req, res) => {
-	try {
-		const carts = await Cart.find().populate("products.product").lean();
-		res.json(carts);
-	} catch (error) {
-		res.status(500).json({ error: error.message });
-	}
-});
-
+// Vista de un carrito específico
 router.get("/:cid", renderCart);
 
+// Vista de todos los carritos
+router.get("/", renderAllCarts);
+
+// Crear un carrito vacío
 router.post("/", async (req, res) => {
 	try {
-		const newCart = await Cart.create({ user: req.body.user, products: [] });
-		res.status(201).json(newCart);
+		const newCart = await Cart.create({ products: [] });
+		// Retorna el carrito con populate vacío (opcional)
+		const populatedCart = await Cart.findById(newCart._id)
+			.populate("products.product")
+			.lean();
+		res.status(201).json(populatedCart);
 	} catch (error) {
 		res.status(500).json({ error: error.message });
 	}
 });
 
+// Agregar producto al carrito
 router.post("/:cid/product/:pid", async (req, res) => {
 	try {
 		const cart = await Cart.findById(req.params.cid);
@@ -35,6 +36,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
 
 		const quantity = req.body.quantity ?? 1;
 		const prodIndex = cart.products.findIndex((p) => p.product.equals(product._id));
+
 		if (prodIndex >= 0) {
 			cart.products[prodIndex].quantity += Number(quantity);
 		} else {
@@ -52,6 +54,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
 	}
 });
 
+// Actualizar cantidad de un producto específico
 router.put("/:cid/products/:pid", async (req, res) => {
 	try {
 		const { quantity } = req.body;
@@ -66,6 +69,7 @@ router.put("/:cid/products/:pid", async (req, res) => {
 		}
 
 		await cart.save();
+
 		const populatedCart = await Cart.findById(req.params.cid)
 			.populate("products.product")
 			.lean();
@@ -75,6 +79,7 @@ router.put("/:cid/products/:pid", async (req, res) => {
 	}
 });
 
+// Actualizar todos los productos de un carrito
 router.put("/:cid", async (req, res) => {
 	try {
 		const { products } = req.body;
@@ -93,6 +98,7 @@ router.put("/:cid", async (req, res) => {
 	}
 });
 
+// Eliminar un producto específico del carrito
 router.delete("/:cid/products/:pid", async (req, res) => {
 	try {
 		const cart = await Cart.findById(req.params.cid);
@@ -110,6 +116,7 @@ router.delete("/:cid/products/:pid", async (req, res) => {
 	}
 });
 
+// Vaciar carrito completo
 router.delete("/:cid", async (req, res) => {
 	try {
 		const cart = await Cart.findById(req.params.cid);

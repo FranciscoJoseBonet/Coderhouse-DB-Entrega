@@ -16,33 +16,51 @@
 			#f1f6fc; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12); }
 			li .title { font-weight: 600; color: #34495e; font-size: 1.05rem; } li .meta {
 			font-size: 0.85rem; color: #7f8c8d; display: flex; flex-wrap: wrap; gap: 8px; } li
-			.price { color: #27ae60; font-weight: 700; font-size: 1rem; } a { display: block;
-			text-align: center; margin-top: 25px; color: #3498db; text-decoration: none;
-			font-weight: 600; transition: color 0.2s; } a:hover { color: #2980b9;
-			text-decoration: underline; }
+			.price { color: #27ae60; font-weight: 700; font-size: 1rem; } h2.total { margin-top:
+			25px; /* separa del listado de items */ text-align: center; color: #e74c3c; } a {
+			display: block; text-align: center; margin-top: 25px; color: #3498db;
+			text-decoration: none; font-weight: 600; transition: color 0.2s; } a:hover { color:
+			#2980b9; text-decoration: underline; }
 		</style>
 	</head>
 	<body>
 		<h1>Cart Details</h1>
+
 		{{#if cart}}
-			<ul id="cartList">
-				{{#each cart.products}}
-					<li>
-						<div class="title">{{this.product.title}}</div>
-						<div class="meta">ID: {{this.product._id}} | Code: {{this.product.code}}</div>
-						<div class="price">Price: ${{this.product.price}}</div>
-						<div>Quantity: {{this.quantity}}</div>
-						<div>Subtotal: ${{multiply this.product.price this.quantity}}</div>
-					</li>
-				{{/each}}
-			</ul>
-			<h2>Total: ${{total}}</h2>
+			{{#if cart.products.length}}
+				<ul id="cartList">
+					{{#each cart.products}}
+						{{#if product}}
+							<li>
+								<div class="title">{{product.title}}</div>
+								<div class="meta">ID: {{product._id}} | Code: {{product.code}}</div>
+								<div class="price">Price: ${{product.price}}</div>
+								<div>Quantity: {{quantity}}</div>
+								<div>Subtotal: ${{multiply product.price quantity}}</div>
+							</li>
+						{{else}}
+							<li>
+								<div>Producto eliminado</div>
+							</li>
+						{{/if}}
+					{{/each}}
+				</ul>
+				<h2 class="total">Total: ${{total}}</h2>
+			{{else}}
+				<p
+					style="text-align:center; font-weight:600; margin-top:20px; font-size:60px"
+				>Carrito vacío</p>
+			{{/if}}
+
 			<p>Status: <strong>{{cart.status}}</strong></p>
+
 			<p>Created: {{cart.createdAt}}</p>
 			<p>Updated: {{cart.updatedAt}}</p>
+
 		{{else}}
 			<p>No cart found.</p>
 		{{/if}}
-		<p><a href="/api/products">Go Back to Products</a></p>
+
+		<p><a href="/api/carts">Go Back to Carts</a></p>
 	</body>
 </html>

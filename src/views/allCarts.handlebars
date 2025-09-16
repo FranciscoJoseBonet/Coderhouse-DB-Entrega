@@ -1,0 +1,55 @@
+<h1>Todos los Carritos</h1>
+
+{{#if carts.length}}
+	<ul id="cartList">
+		{{#each carts}}
+			<li>
+
+				<section style="display: flex; gap: 30%"><a
+						href="/api/carts/{{this._id}}"
+						class="cart-link"
+					>
+						<h2>Carrito ID: {{this._id}}</h2>
+						<p>Status: <strong>{{this.status}}</strong></p>
+						<p>Usuario: {{this.user}}</p>
+
+						<ul>
+							{{#each this.products}}
+								<li style="margin-left: 30px;">
+									<div><strong>{{this.product.title}}</strong></div>
+									<div class="meta">ID:
+										{{this.product._id}}
+										| Código:
+										{{this.product.code}}</div>
+									<div class="price">Precio: ${{this.product.price}}</div>
+									<div>Cantidad: {{this.quantity}}</div>
+								</li>
+							{{/each}}
+						</ul></a>
+					<div
+						style="display: flex; flex-direction: column; gap: 10px; height: 100px; justify-content: center; align-items: center; top:auto"
+					>
+						<button type="button" onclick="vaciarCarrito('{{this._id}}')">Vaciar Carrito</button>
+						<button type="button" onclick="eliminarCarrito('{{this._id}}')">Eliminar
+							Carrito</button>
+					</div>
+
+				</section>
+
+			</li>
+		{{/each}}
+	</ul>
+{{else}}
+	<p>No hay carritos disponibles.</p>
+{{/if}}
+
+<style>
+	ul#cartList { list-style: none; padding: 0; margin: 0; display: grid; gap: 15px; }
+	ul#cartList li section { background: #ffffff; padding: 25px; border-radius: 12px;
+	box-shadow: 0 6px 15px rgba(0,0,0,0.08); cursor: pointer; } .cart-link {
+	text-decoration: none; color: inherit; display: block; } button { background: #e74c3c;
+	color: #fff; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer;
+	font-weight: 600; transition: background 0.2s, transform 0.1s; } button:hover {
+	background: #c0392b; transform: translateY(-2px); } .meta { font-size: 0.85rem; color:
+	#7f8c8d; } .price { color: #27ae60; font-weight: 700; }
+</style>
