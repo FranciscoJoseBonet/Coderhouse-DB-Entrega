@@ -37,6 +37,7 @@ const hbs = create({
 		ifEquals: (a, b, options) => (a == b ? options.fn(this) : options.inverse(this)),
 		gt: (a, b) => a > b,
 		lt: (a, b) => a < b,
+		multiply: (a, b) => a * b,
 	},
 });
 

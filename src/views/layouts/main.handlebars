@@ -6,13 +6,21 @@
 		<style>
 			* { box-sizing: border-box; margin: 0; padding: 0; } body { font-family: 'Segoe UI',
 			Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f8; color: #333;
-			display: flex; flex-direction: column; min-height: 100vh; } header {
-			background-color: #3498db; padding: 15px 20px; } nav { display: flex;
-			justify-content: center; gap: 15px; } nav a { color: #fff; text-decoration: none;
-			font-weight: bold; transition: color 0.2s; } nav a:hover { color: #ecf0f1; }
-			main.contenedor { flex: 1; max-width: 900px; width: 90%; margin: 20px auto; } footer
-			{ background-color: #2c3e50; color: #ecf0f1; text-align: center; padding: 15px 0;
-			margin-top: auto; } section { margin-bottom: 20px; }
+			display: flex; flex-direction: column; min-height: 100vh; padding: 0 !important;}
+			header { background-color: #3498db; padding: 15px 20px; } nav { display: flex;
+			justify-content: center; gap: 15px; align-items: center; } /* Estilo moderno para
+			links */ nav a { color: #fff; text-decoration: none; font-weight: bold; padding:
+			10px 16px; border-radius: 8px; background: rgba(255,255,255,0.1); transition: all
+			0.3s ease; box-shadow: 0 3px 6px rgba(0,0,0,0.1); } nav a:hover { background:
+			rgba(255,255,255,0.25); transform: translateY(-2px); box-shadow: 0 6px 12px
+			rgba(0,0,0,0.15); } /* Botón de carrito destacado */ .cart-btn { background:
+			#27ae60; color: #fff; font-weight: bold; padding: 10px 18px; border-radius: 12px;
+			text-decoration: none; transition: all 0.3s ease; box-shadow: 0 3px 6px
+			rgba(0,0,0,0.15); } .cart-btn:hover { background: #2ecc71; transform:
+			translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.2); } main.contenedor { flex:
+			1; max-width: 900px; width: 90%; margin: 20px auto; } footer { background-color:
+			#2c3e50; color: #ecf0f1; text-align: center; padding: 15px 0; margin-top: auto; }
+			section { margin-bottom: 20px; }
 		</style>
 	</head>
 	<body>
@@ -21,6 +29,7 @@
 			<nav>
 				<a href="/">Home</a>
 				<a href="/realtimeproducts">Real-Time</a>
+				<a href="/api/carts/tu_cart_id_aqui" class="cart-btn">Carrito</a>
 			</nav>
 		</header>
 
