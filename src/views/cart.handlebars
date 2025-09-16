@@ -20,6 +20,10 @@
 			25px; text-align: center; color: #e74c3c; } a { display: block; text-align: center;
 			margin-top: 25px; color: #3498db; text-decoration: none; font-weight: 600;
 			transition: color 0.2s; } a:hover { color: #2980b9; text-decoration: underline; }
+			button{;color:#fff;border:none;padding:12px
+			0;border-radius:8px;cursor:pointer;font-weight:600;transition:background
+			0.2s,transform 0.1s;width:150px;align-self:flex-end;}
+			button:hover{;transform:translateY(-1px);}
 		</style>
 	</head>
 	<body>
@@ -36,10 +40,23 @@
 								<div class="price">Price: ${{product.price}}</div>
 								<div>Quantity: {{quantity}}</div>
 								<div>Subtotal: ${{multiply product.price quantity}}</div>
+
+								<div
+									style="display: flex; position:relative; justify-content: flex-end; margin-top: 10px;"
+								><button style="color: #ffff; background: #ff1212">Delete Product</button></div>
 							</li>
 						{{else}}
-							<li>
+							<li style="display: flex
+;
+    flex-direction: row;
+    align-content: flex-end;
+    justify-content: space-between;
+    align-items: center;">
 								<div>Producto eliminado</div>
+								<div
+									style="display: flex; position:relative; justify-content: flex-end; margin-top: 10px;"
+								><button style="color: #ffff; background: #ff1212; margin-top: 0 !important">Delete</button></div>
+							</li>
 							</li>
 						{{/if}}
 					{{/each}}

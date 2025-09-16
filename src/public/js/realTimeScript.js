@@ -19,7 +19,7 @@ function renderProducts(result) {
                 <small>Status: ${prod.status ? "Active" : "Inactive"}</small>
             </div>
 			<div styles="margin-top: 10px; display: flex; justify-content: flex-end;">
-            	<button styles='background-color: red' class="deleteBtn" data-id="${
+            	<button styles='background: #ff1212 !important' class="deleteBtn" data-id="${
 								prod._id
 							}">Delete</button>
             	<button class="updateBtn" data-id="${prod._id}">Update</button>
@@ -107,7 +107,6 @@ document.getElementById("updateForm").addEventListener("submit", (e) => {
 	socket.emit("product:update", { id, data });
 	document.getElementById("updateModal").style.display = "none";
 
-	// Actualizar en el DOM local
 	const li = document.querySelector(`.updateBtn[data-id="${id}"]`).parentElement;
 	li.querySelector(".title").textContent = data.title;
 	li.querySelector(".description").textContent = data.description || "";

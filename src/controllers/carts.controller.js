@@ -70,3 +70,18 @@ export const addProductToCart = async (req, res) => {
 		res.status(500).json({ error: error.message });
 	}
 };
+
+export const removeProductFromCart = async (req, res) => {
+	try {
+		const { cid, pid } = req.params;
+		const quantity = Number(req.body.quantity ?? 1);
+
+		const cart = await Cart.findById(cid);
+		if (!cart) return res.status(404).json({ error: "Cart not found" });
+
+		const product = await Product.findById(pid);
+		if (!product) return res.status(404).json({ error: "Product not found" });
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
+};
