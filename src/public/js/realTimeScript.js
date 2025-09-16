@@ -1,10 +1,11 @@
 const socket = io();
 
 const prodList = document.getElementById("prodList");
+const paginationDiv = document.getElementById("pagination");
 
-socket.on("products:list", (products) => {
+function renderProducts(result) {
 	prodList.innerHTML = "";
-	products.forEach((prod) => {
+	result.products.forEach((prod) => {
 		const li = document.createElement("li");
 		li.innerHTML = `
             <div class="title">${prod.title}</div>
@@ -19,7 +20,27 @@ socket.on("products:list", (products) => {
         `;
 		prodList.appendChild(li);
 	});
-});
+
+	// Render paginación
+	paginationDiv.innerHTML = "";
+	if (result.hasPrevPage) {
+		const prevBtn = document.createElement("button");
+		prevBtn.textContent = "Anterior";
+		prevBtn.onclick = () => socket.emit("products:page", result.prevPage);
+		paginationDiv.appendChild(prevBtn);
+	}
+	const pageInfo = document.createElement("span");
+	pageInfo.textContent = `Página ${result.page} de ${result.totalPages}`;
+	paginationDiv.appendChild(pageInfo);
+	if (result.hasNextPage) {
+		const nextBtn = document.createElement("button");
+		nextBtn.textContent = "Siguiente";
+		nextBtn.onclick = () => socket.emit("products:page", result.nextPage);
+		paginationDiv.appendChild(nextBtn);
+	}
+}
+
+socket.on("products:list", renderProducts);
 
 document.getElementById("createForm").addEventListener("submit", (e) => {
 	e.preventDefault();
@@ -46,7 +67,7 @@ document.getElementById("createForm").addEventListener("submit", (e) => {
 
 document.getElementById("deleteForm").addEventListener("submit", (e) => {
 	e.preventDefault();
-	const id = parseInt(e.target.prodId.value);
+	const id = e.target.prodId.value.trim();
 	socket.emit("product:delete", id);
 	e.target.reset();
 });
