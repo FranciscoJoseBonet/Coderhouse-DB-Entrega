@@ -41,25 +41,19 @@
 								<div>Quantity: {{quantity}}</div>
 								<div>Subtotal: ${{multiply product.price quantity}}</div>
 
-								<div
-									style="display: flex; position:relative; justify-content: flex-end; margin-top: 10px;"
-								><button style="color: #ffff; background: #ff1212">Delete Product</button></div>
+								<div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+									<button
+										style="color: #fff; background: #ff1212"
+										onclick="deleteProduct('{{product._id}}')"
+									>
+										Delete Product
+									</button>
+								</div>
 							</li>
 						{{else}}
-							<li style="display: flex
-;
-    flex-direction: row;
-    align-content: flex-end;
-    justify-content: space-between;
-    align-items: center;">
-								<div>Producto eliminado</div>
-								<div
-									style="display: flex; position:relative; justify-content: flex-end; margin-top: 10px;"
-								><button style="color: #ffff; background: #ff1212; margin-top: 0 !important">Delete</button></div>
-							</li>
-							</li>
 						{{/if}}
 					{{/each}}
+
 				</ul>
 				<h2 class="total">Total: ${{total}}</h2>
 			{{else}}
@@ -79,4 +73,13 @@
 
 		<p><a href="/api/carts">Go Back to Carts</a></p>
 	</body>
+	<script>
+		async function deleteProduct(productId) { if (!confirm("¿Querés eliminarlo?")) return;
+		try { const res = await fetch(`/api/carts/{{cart._id}}/products/${productId}`, {
+		method: "DELETE" }); const data = await res.json(); if (data.success) {
+		alert("Producto eliminado correctamente"); location.reload(); } else {
+		alert(data.message || "Error al eliminar el producto"); } } catch (err) {
+		console.error(err); alert("Error al eliminar el producto"); } }
+	</script>
+
 </html>

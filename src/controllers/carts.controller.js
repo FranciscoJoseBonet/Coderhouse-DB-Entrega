@@ -16,8 +16,6 @@ export const renderCart = async (req, res) => {
 			const price = Number(item.product.price) || 0;
 			return acc + price * item.quantity;
 		}, 0);
-
-		console.log(cart);
 		res.render("cart", { cart, total });
 	} catch (error) {
 		console.error(error);
@@ -74,14 +72,25 @@ export const addProductToCart = async (req, res) => {
 export const removeProductFromCart = async (req, res) => {
 	try {
 		const { cid, pid } = req.params;
-		const quantity = Number(req.body.quantity ?? 1);
 
 		const cart = await Cart.findById(cid);
-		if (!cart) return res.status(404).json({ error: "Cart not found" });
+		if (!cart) return res.status(404).json({ success: false, message: "Cart not found" });
 
-		const product = await Product.findById(pid);
-		if (!product) return res.status(404).json({ error: "Product not found" });
+		// Buscar índice del producto en el carrito
+		const productIndex = cart.products.findIndex(
+			(item) => item.product.toString() === pid
+		);
+
+		if (productIndex === -1) {
+			return res.status(404).json({ success: false, message: "Product not in cart" });
+		}
+
+		// Eliminar el producto
+		cart.products.splice(productIndex, 1);
+		await cart.save();
+
+		return res.json({ success: true, message: "Product removed from cart" });
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		res.status(500).json({ success: false, error: error.message });
 	}
 };

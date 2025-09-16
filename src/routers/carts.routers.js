@@ -3,6 +3,7 @@ import {
 	addProductToCart,
 	renderCart,
 	renderAllCarts,
+	removeProductFromCart,
 } from "../controllers/carts.controller.js";
 import Cart from "../models/carts.model.js";
 
@@ -85,22 +86,24 @@ router.put("/:cid", async (req, res) => {
 });
 
 // Eliminar un producto específico del carrito
-router.delete("/:cid/products/:pid", async (req, res) => {
-	try {
-		const cart = await Cart.findById(req.params.cid);
-		if (!cart) return res.status(404).json({ error: "Cart not found" });
+// router.delete("/:cid/products/:pid", async (req, res) => {
+// 	try {
+// 		const cart = await Cart.findById(req.params.cid);
+// 		if (!cart) return res.status(404).json({ error: "Cart not found" });
 
-		cart.products = cart.products.filter((p) => !p.product.equals(req.params.pid));
-		await cart.save();
+// 		cart.products = cart.products.filter((p) => !p.product.equals(req.params.pid));
+// 		await cart.save();
 
-		const populatedCart = await Cart.findById(req.params.cid)
-			.populate("products.product")
-			.lean();
-		res.json(populatedCart);
-	} catch (error) {
-		res.status(500).json({ error: error.message });
-	}
-});
+// 		const populatedCart = await Cart.findById(req.params.cid)
+// 			.populate("products.product")
+// 			.lean();
+// 		res.json(populatedCart);
+// 	} catch (error) {
+// 		res.status(500).json({ error: error.message });
+// 	}
+// });
+
+router.delete("/:cid/products/:pid", removeProductFromCart);
 
 // Vaciar carrito completo
 router.delete("/:cid/empty", async (req, res) => {
@@ -116,6 +119,7 @@ router.delete("/:cid/empty", async (req, res) => {
 	}
 });
 
+// Para borrar el carrito
 router.delete("/:cid", async (req, res) => {
 	try {
 		const cart = await Cart.findByIdAndDelete(req.params.cid);
