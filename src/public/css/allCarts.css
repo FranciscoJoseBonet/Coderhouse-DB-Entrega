@@ -25,6 +25,7 @@ ul#cartList {
 
 .cart-body {
 	margin-left: 20px;
+	margin-top: 10px;
 }
 
 .cart-body p {
@@ -169,4 +170,11 @@ ul#cartList {
 .createCartBtn:hover {
 	background: #27ae60;
 	transform: translateY(-2px);
+}
+
+a {
+	text-decoration: none;
+	color: inherit;
+	font-weight: 200;
+	text-align: start;
 }

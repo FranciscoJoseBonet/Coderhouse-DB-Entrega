@@ -16,36 +16,36 @@
 							</div>
 							<span class="status-badge status-{{this.status}}">{{this.status}}</span>
 						</header>
+
+						<div class="cart-body">
+							<p><strong>Usuario:</strong> {{this.user}}</p>
+
+							{{#if this.products.length}}
+								<ul class="product-list">
+									{{#each this.products}}
+										{{#if product}}
+											<li class="product-item">
+												<div class="product-info">
+													<strong>{{this.product.title}}</strong>
+													<span class="meta">ID:
+														{{this.product._id}}
+														| Código:
+														{{this.product.code}}</span>
+												</div>
+												<div class="product-extra">
+													<span class="price">${{this.product.price}}</span>
+													<span class="qty">x{{this.quantity}}</span>
+												</div>
+											</li>
+										{{/if}}
+									{{/each}}
+								</ul>
+							{{else}}
+								<p class="empty" style="margin-left:20px; margin-top:5px">Este carrito
+									está vacío</p>
+							{{/if}}
+						</div>
 					</a>
-					<div class="cart-body">
-						<p><strong>Usuario:</strong> {{this.user}}</p>
-
-						{{#if this.products.length}}
-							<ul class="product-list">
-								{{#each this.products}}
-									{{#if product}}
-										<li class="product-item">
-											<div class="product-info">
-												<strong>{{this.product.title}}</strong>
-												<span class="meta">ID:
-													{{this.product._id}}
-													| Código:
-													{{this.product.code}}</span>
-											</div>
-											<div class="product-extra">
-												<span class="price">${{this.product.price}}</span>
-												<span class="qty">x{{this.quantity}}</span>
-											</div>
-										</li>
-									{{/if}}
-								{{/each}}
-							</ul>
-						{{else}}
-							<p class="empty" style="margin-left:20px; margin-top:5px">Este carrito está
-								vacío</p>
-						{{/if}}
-					</div>
-
 					<footer class="cart-footer">
 						<button
 							type="button"

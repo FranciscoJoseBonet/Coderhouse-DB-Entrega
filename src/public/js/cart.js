@@ -34,13 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		btn.addEventListener("click", async (e) => {
 			const li = e.target.closest("li");
 			const productId = li.dataset.productId;
-			const quantity = parseInt(
-				prompt(
-					`Ingrese la
-nueva cantidad:`,
-					"1"
-				)
-			);
+			const quantity = parseInt(prompt(`Ingrese la nueva cantidad:`, "1"));
 			if (!quantity || quantity < 1) {
 				alert("Cantidad inválida");
 				return;
