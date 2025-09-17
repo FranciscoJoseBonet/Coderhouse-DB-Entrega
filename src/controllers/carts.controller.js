@@ -2,6 +2,16 @@ import { getCartByIdService } from "../services/carts.service.js";
 import Cart from "../models/carts.model.js";
 import Product from "../models/products.model.js";
 
+export const getCarts = async (req, res) => {
+	try {
+		const carts = await Cart.find().lean();
+		res.json(carts);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ error: "Error al obtener los carritos" });
+	}
+};
+
 export const renderCart = async (req, res) => {
 	try {
 		const { cid } = req.params;
@@ -144,5 +154,53 @@ export const createCart = async (req, res) => {
 		res.status(201).json({ success: true, cart: populatedCart });
 	} catch (error) {
 		res.status(500).json({ success: false, message: error.message });
+	}
+};
+
+export const updateProductQuantity = async (req, res) => {
+	try {
+		const { quantity } = req.body;
+		const cart = await Cart.findById(req.params.cid);
+		if (!cart) return res.status(404).json({ error: "Cart not found" });
+
+		const prodIndex = cart.products.findIndex((p) => p.product.equals(req.params.pid));
+		if (prodIndex >= 0) {
+			cart.products[prodIndex].quantity = Number(quantity);
+		} else {
+			return res.status(404).json({ error: "Product not in cart" });
+		}
+
+		await cart.save();
+
+		const populatedCart = await Cart.findById(req.params.cid)
+			.populate("products.product")
+			.lean();
+		res.json(populatedCart);
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
+};
+
+export const emptyCart = async (req, res) => {
+	try {
+		const cart = await Cart.findById(req.params.cid);
+		if (!cart) return res.status(404).json({ error: "Cart not found" });
+
+		cart.products = [];
+		await cart.save();
+		res.json({ success: true });
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
+};
+
+export const deleteCart = async (req, res) => {
+	try {
+		const cart = await Cart.findByIdAndDelete(req.params.cid);
+		if (!cart) return res.status(404).json({ error: "Cart not found" });
+
+		res.json({ success: true });
+	} catch (error) {
+		res.status(500).json({ error: error.message });
 	}
 };

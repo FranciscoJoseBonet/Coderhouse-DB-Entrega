@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	let currentStock = 0;
 	let carts = [];
 
-	fetch("/api/carts/all-json")
+	fetch("/api/carts/")
 		.then((res) => res.json())
 		.then((data) => {
 			carts = data;
