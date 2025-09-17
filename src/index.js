@@ -8,8 +8,6 @@ const httpServer = createServer(app);
 const io = new Server(httpServer);
 
 io.on("connection", async (socket) => {
-	console.log("Client connected");
-
 	const result = await getProductsService({ limit: 6, page: 1 });
 	socket.emit("products:list", result);
 

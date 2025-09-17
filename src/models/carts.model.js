@@ -13,6 +13,11 @@ const cartSchema = new mongoose.Schema({
 		enum: ["active", "completed", "abandoned"],
 		default: "active",
 	},
+	name: {
+		type: String,
+		unique: true,
+		required: true,
+	},
 	createdAt: { type: Date, default: Date.now },
 	updatedAt: { type: Date, default: Date.now },
 });

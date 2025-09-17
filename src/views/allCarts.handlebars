@@ -4,38 +4,56 @@
 	<ul id="cartList">
 		{{#each carts}}
 			<li>
-				<section style="display: flex; gap: 30%">
-					<a href="/api/carts/{{this._id}}" class="cart-link">
-						<h2>Carrito ID: {{this._id}}</h2>
-						<p>Status: <strong>{{this.status}}</strong></p>
-						<p>Usuario: {{this.user}}</p>
+				<section class="cart-card">
+					<header class="cart-header">
+						<div>
+							<h2 class="cart-name">{{this.name}}</h2>
+							<p class="cart-id">ID interno: {{this._id}}</p>
+						</div>
+						<span class="status-badge status-{{this.status}}">{{this.status}}</span>
+					</header>
 
-						<ul>
-							{{#each this.products}}
-								{{#if product}}
-									<li style="margin-left: 30px;">
-										<div><strong>{{this.product.title}}</strong></div>
-										<div class="meta">ID:
-											{{this.product._id}}
-											| Código:
-											{{this.product.code}}</div>
-										<div class="price">Precio: ${{this.product.price}}</div>
-										<div>Cantidad: {{this.quantity}}</div>
-									</li>
+					<div class="cart-body">
+						<p><strong>Usuario:</strong> {{this.user}}</p>
 
-								{{else}}
-								{{/if}}
-							{{/each}}
-						</ul>
-					</a>
-
-					<div
-						style="display: flex; flex-direction: column; gap: 10px; justify-content: center; align-items: center;"
-					>
-						<button type="button" onclick="vaciarCarrito('{{this._id}}')">Vaciar Carrito</button>
-						<button type="button" onclick="eliminarCarrito('{{this._id}}')">Eliminar
-							Carrito</button>
+						{{#if this.products.length}}
+							<ul class="product-list">
+								{{#each this.products}}
+									{{#if product}}
+										<li class="product-item">
+											<div class="product-info">
+												<strong>{{this.product.title}}</strong>
+												<span class="meta">ID:
+													{{this.product._id}}
+													| Código:
+													{{this.product.code}}</span>
+											</div>
+											<div class="product-extra">
+												<span class="price">${{this.product.price}}</span>
+												<span class="qty">x{{this.quantity}}</span>
+											</div>
+										</li>
+									{{/if}}
+								{{/each}}
+							</ul>
+						{{else}}
+							<p class="empty" style="margin-left:20px; margin-top:5px">Este carrito está
+								vacío</p>
+						{{/if}}
 					</div>
+
+					<footer class="cart-footer">
+						<button
+							type="button"
+							class="btn-secondary"
+							onclick="vaciarCarrito('{{this._id}}')"
+						>Vaciar</button>
+						<button
+							type="button"
+							class="btn-danger"
+							onclick="eliminarCarrito('{{this._id}}')"
+						>Eliminar</button>
+					</footer>
 				</section>
 			</li>
 		{{/each}}
@@ -44,35 +62,10 @@
 	<p>No hay carritos disponibles.</p>
 {{/if}}
 
-<div><button id="createCart" class="createCartBtn" onClick="crearCarrito">Crear nuevo
-		carrito</button></div>
+<div>
+	<button id="createCart" class="createCartBtn" onclick="crearCarrito()">Crear nuevo
+		carrito</button>
+</div>
 
-<script>
-	async function vaciarCarrito(cartId){ if(!confirm("¿Querés vaciar este carrito?"))
-	return; try{ const res=await fetch(`/api/carts/${cartId}/empty`,{method:'DELETE'});
-	const data=await res.json(); if(data.success){ alert("Carrito vaciado\ncorrectamente");
-	location.reload(); }else{ alert(data.message||"Error al vaciar el carrito"); }
-	}catch(err){ console.error(err); alert("Error al vaciar el carrito"); } } async function
-	eliminarCarrito(cartId){ if(!confirm("¿Querés eliminar este carrito completamente?"))
-	return; try{ const res=await fetch(`/api/carts/${cartId}`,{method:'DELETE'}); const
-	data=await res.json(); if(data.success){ alert("Carrito eliminado\ncorrectamente");
-	location.reload(); }else{ alert(data.message||"Error al eliminar el carrito"); }
-	}catch(err){ console.error(err); alert("Error al eliminar el carrito"); } } //creacion
-	async function crearCarrito(){ try{ const res=await fetch('/api/carts',{method:'POST'});
-	const data=await res.json(); if(data.success){ alert("Carrito creado\ncorrectamente");
-	location.reload(); }else{ alert(data.message||"Error al crear el carrito"); }
-	}catch(err){ console.error(err); alert("Error al crear el carrito"); } }
-</script>
-
-<style>
-	ul#cartList { list-style: none; padding: 0; margin: 0; display: grid; gap: 15px; }
-	ul#cartList li section { background: #ffffff; padding: 25px; border-radius: 12px;
-	box-shadow: 0 6px 15px rgba(0,0,0,0.08); } .cart-link { text-decoration: none; color:
-	inherit; display: block; } button { background: #e74c3c; color: #fff; border: none;
-	padding: 10px 15px; border-radius: 8px; font-weight: 600; transition: background 0.2s,
-	transform 0.1s; } button:hover { background: #c0392b; transform: translateY(-2px); }
-	.meta { font-size: 0.85rem; color: #7f8c8d; } .price { color: #27ae60; font-weight: 700;
-	} .createCartBtn { margin-top: 30px; background: #2ecc71; } .createCartBtn:hover {
-	background: #27ae60; } #createCart { position:fixed; padding: 12px 20px; font-size:
-	1.1rem; bottom:30px; right:30px; box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
-</style>
+<link rel="stylesheet" href="/css/allCarts.css" />
+<script src="/js/allCarts.js"></script>

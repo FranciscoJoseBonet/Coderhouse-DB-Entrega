@@ -94,3 +94,30 @@ export const removeProductFromCart = async (req, res) => {
 		res.status(500).json({ success: false, error: error.message });
 	}
 };
+
+export const createCart = async (req, res) => {
+	try {
+		const lastCart = await Cart.findOne().sort({ createdAt: -1 });
+		let nextNumber = 1;
+
+		if (lastCart && lastCart.name) {
+			const match = lastCart.name.match(/Carrito-(\d+)/);
+			if (match) {
+				nextNumber = parseInt(match[1]) + 1;
+			}
+		}
+
+		const newCart = await Cart.create({
+			products: [],
+			name: `Carrito-${nextNumber}`,
+		});
+
+		const populatedCart = await Cart.findById(newCart._id)
+			.populate("products.product")
+			.lean();
+
+		res.status(201).json({ success: true, cart: populatedCart });
+	} catch (error) {
+		res.status(500).json({ success: false, message: error.message });
+	}
+};

@@ -4,6 +4,7 @@ import {
 	renderCart,
 	renderAllCarts,
 	removeProductFromCart,
+	createCart,
 } from "../controllers/carts.controller.js";
 import Cart from "../models/carts.model.js";
 
@@ -25,19 +26,7 @@ router.get("/all-json", async (req, res) => {
 router.get("/:cid", renderCart);
 
 // Crear un carrito vacío
-router.post("/", async (req, res) => {
-	try {
-		console.log("Creando un nuevo carrito...");
-		const newCart = await Cart.create({ products: [] });
-		// Retorna el carrito con populate vacío (opcional)
-		const populatedCart = await Cart.findById(newCart._id)
-			.populate("products.product")
-			.lean();
-		res.status(201).json(populatedCart);
-	} catch (error) {
-		res.status(500).json({ error: error.message });
-	}
-});
+router.post("/", createCart);
 
 // Agregar producto al carrito
 router.post("/:cid/product/:pid", addProductToCart);
