@@ -42,7 +42,7 @@ Esta API permite gestionar productos y carritos de compra utilizando Node.js, Ex
 Para iniciar el servidor:
 
 ```bash
-npm start
+npm run dev
 ```
 
 > El servidor quedará escuchando en:
