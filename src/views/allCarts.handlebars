@@ -5,14 +5,15 @@
 		{{#each carts}}
 			<li>
 				<section class="cart-card">
-					<header class="cart-header">
-						<div>
-							<h2 class="cart-name">{{this.name}}</h2>
-							<p class="cart-id">ID interno: {{this._id}}</p>
-						</div>
-						<span class="status-badge status-{{this.status}}">{{this.status}}</span>
-					</header>
-
+					<a href="carts/{{this._id}}" style="text-decoration: none; color: inherit;">
+						<header class="cart-header">
+							<div>
+								<h2 class="cart-name">{{this.name}}</h2>
+								<p class="cart-id">ID interno: {{this._id}}</p>
+							</div>
+							<span class="status-badge status-{{this.status}}">{{this.status}}</span>
+						</header>
+					</a>
 					<div class="cart-body">
 						<p><strong>Usuario:</strong> {{this.user}}</p>
 

@@ -1,186 +1,164 @@
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>{{title}}</title>
-		<link rel="stylesheet" href="/css/realTimeProducts.css" />
+<h1>Real-Time Products Management</h1>
 
-	</head>
-	<body>
-		<h1>Real-Time Products Management</h1>
+<section>
+	<h2>Products List</h2>
+	<ul id="prodList"></ul>
+	<div id="pagination" class="pagination">
+		<button id="prevPage" class="pagination-btn">Anterior</button>
+		<span class="pagination-info">Página 1 de 10</span>
+		<button id="nextPage" class="pagination-btn">Siguiente</button>
+	</div>
+</section>
 
-		<section>
-			<h2>Products List</h2>
-			<ul id="prodList"></ul>
-			<div id="pagination" class="pagination">
-				<button id="prevPage" class="pagination-btn">Anterior</button>
-				<span class="pagination-info">Página 1 de 10</span>
-				<button id="nextPage" class="pagination-btn">Siguiente</button>
+<section>
+	<h2>Add Product</h2>
+	<form id="createForm">
+		<div class="fila">
+			<div>
+				<label for="title">Title</label>
+				<input id="title" name="title" type="text" placeholder="Title" required />
 			</div>
-		</section>
-
-		<section>
-			<h2>Add Product</h2>
-			<form id="createForm">
-				<div class="fila">
-					<div>
-						<label for="title">Title</label>
-						<input id="title" name="title" type="text" placeholder="Title" required />
-					</div>
-					<div>
-						<label for="description">Description</label>
-						<input
-							id="description"
-							name="description"
-							type="text"
-							placeholder="Description"
-						/>
-					</div>
-				</div>
-				<div class="fila">
-					<div>
-						<label for="code">Code</label>
-						<input id="code" name="code" type="text" placeholder="Code" required />
-					</div>
-					<div>
-						<label for="price">Price</label>
-						<input
-							id="price"
-							name="price"
-							type="number"
-							step="0.01"
-							placeholder="Price"
-							required
-						/>
-					</div>
-				</div>
-				<div class="fila">
-					<div>
-						<label for="stock">Stock</label>
-						<input id="stock" name="stock" type="number" placeholder="Stock" required />
-					</div>
-					<div>
-						<label for="category">Category</label>
-						<input
-							id="category"
-							name="category"
-							type="text"
-							placeholder="Category"
-							required
-						/>
-					</div>
-				</div>
-				<div class="fila">
-					<div>
-						<label for="status">Status</label>
-						<select id="status" name="status">
-							<option value="true" selected>Active</option>
-							<option value="false">Inactive</option>
-						</select>
-					</div>
-				</div>
-				<button type="submit">Add</button>
-			</form>
-		</section>
-
-		<section>
-			<h2>Delete Product</h2>
-			<form id="deleteForm">
-				<label for="prodId">Product ID</label>
-				<input id="prodId" name="prodId" type="text" placeholder="Product ID" required />
-				<button type="submit">Delete</button>
-			</form>
-		</section>
-
-		<div id="updateModal" class="modal">
-			<div class="modal-content">
-				<span id="closeModal" class="close">&times;</span>
-				<h2>Update Product</h2>
-				<form id="updateForm">
-					<input type="hidden" id="updateProdId" name="id" />
-					<div class="fila">
-						<div>
-							<label for="updateTitle">Title</label>
-							<input
-								id="updateTitle"
-								name="title"
-								type="text"
-								placeholder="Title"
-								required
-							/>
-						</div>
-						<div>
-							<label for="updateDescription">Description</label>
-							<input
-								id="updateDescription"
-								name="description"
-								type="text"
-								placeholder="Description"
-							/>
-						</div>
-					</div>
-					<div class="fila">
-						<div>
-							<label for="updateCode">Code</label>
-							<input
-								id="updateCode"
-								name="code"
-								type="text"
-								placeholder="Code"
-								required
-							/>
-						</div>
-						<div>
-							<label for="updatePrice">Price</label>
-							<input
-								id="updatePrice"
-								name="price"
-								type="number"
-								step="0.01"
-								placeholder="Price"
-								required
-							/>
-						</div>
-					</div>
-					<div class="fila">
-						<div>
-							<label for="updateStock">Stock</label>
-							<input
-								id="updateStock"
-								name="stock"
-								type="number"
-								placeholder="Stock"
-								required
-							/>
-						</div>
-						<div>
-							<label for="updateCategory">Category</label>
-							<input
-								id="updateCategory"
-								name="category"
-								type="text"
-								placeholder="Category"
-								required
-							/>
-						</div>
-					</div>
-					<div class="fila">
-						<div>
-							<label for="updateStatus">Status</label>
-							<select id="updateStatus" name="status">
-								<option value="true">Active</option>
-								<option value="false">Inactive</option>
-							</select>
-						</div>
-					</div>
-					<button type="submit">Update</button>
-				</form>
+			<div>
+				<label for="description">Description</label>
+				<input
+					id="description"
+					name="description"
+					type="text"
+					placeholder="Description"
+				/>
 			</div>
 		</div>
+		<div class="fila">
+			<div>
+				<label for="code">Code</label>
+				<input id="code" name="code" type="text" placeholder="Code" required />
+			</div>
+			<div>
+				<label for="price">Price</label>
+				<input
+					id="price"
+					name="price"
+					type="number"
+					step="0.01"
+					placeholder="Price"
+					required
+				/>
+			</div>
+		</div>
+		<div class="fila">
+			<div>
+				<label for="stock">Stock</label>
+				<input id="stock" name="stock" type="number" placeholder="Stock" required />
+			</div>
+			<div>
+				<label for="category">Category</label>
+				<input
+					id="category"
+					name="category"
+					type="text"
+					placeholder="Category"
+					required
+				/>
+			</div>
+		</div>
+		<div class="fila">
+			<div>
+				<label for="status">Status</label>
+				<select id="status" name="status">
+					<option value="true" selected>Active</option>
+					<option value="false">Inactive</option>
+				</select>
+			</div>
+		</div>
+		<button type="submit">Add</button>
+	</form>
+</section>
 
-		<p><a href="/">Go Home</a></p>
+<section>
+	<h2>Delete Product</h2>
+	<form id="deleteForm">
+		<label for="prodId">Product ID</label>
+		<input id="prodId" name="prodId" type="text" placeholder="Product ID" required />
+		<button type="submit">Delete</button>
+	</form>
+</section>
 
-		<script src="/socket.io/socket.io.js"></script>
-		<script src="../js/realTimeScript.js"></script>
-	</body>
-</html>
+<div id="updateModal" class="modal">
+	<div class="modal-content">
+		<span id="closeModal" class="close">&times;</span>
+		<h2>Update Product</h2>
+		<form id="updateForm">
+			<input type="hidden" id="updateProdId" name="id" />
+			<div class="fila">
+				<div>
+					<label for="updateTitle">Title</label>
+					<input id="updateTitle" name="title" type="text" placeholder="Title" required />
+				</div>
+				<div>
+					<label for="updateDescription">Description</label>
+					<input
+						id="updateDescription"
+						name="description"
+						type="text"
+						placeholder="Description"
+					/>
+				</div>
+			</div>
+			<div class="fila">
+				<div>
+					<label for="updateCode">Code</label>
+					<input id="updateCode" name="code" type="text" placeholder="Code" required />
+				</div>
+				<div>
+					<label for="updatePrice">Price</label>
+					<input
+						id="updatePrice"
+						name="price"
+						type="number"
+						step="0.01"
+						placeholder="Price"
+						required
+					/>
+				</div>
+			</div>
+			<div class="fila">
+				<div>
+					<label for="updateStock">Stock</label>
+					<input
+						id="updateStock"
+						name="stock"
+						type="number"
+						placeholder="Stock"
+						required
+					/>
+				</div>
+				<div>
+					<label for="updateCategory">Category</label>
+					<input
+						id="updateCategory"
+						name="category"
+						type="text"
+						placeholder="Category"
+						required
+					/>
+				</div>
+			</div>
+			<div class="fila">
+				<div>
+					<label for="updateStatus">Status</label>
+					<select id="updateStatus" name="status">
+						<option value="true">Active</option>
+						<option value="false">Inactive</option>
+					</select>
+				</div>
+			</div>
+			<button type="submit">Update</button>
+		</form>
+	</div>
+</div>
+
+<p><a href="/">Go Home</a></p>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="../js/realTimeScript.js"></script>
+<link rel="stylesheet" href="/css/realTimeProducts.css" />
