@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				selectCart.innerHTML = "<option disabled>No hay carritos disponibles</option>";
 			} else {
 				selectCart.innerHTML = carts
-					.map((c) => `<option value="${c._id}">Carrito ${c._id}</option>`)
+					.map((c) => `<option value="${c._id}">${c.name}</option>`)
 					.join("");
 			}
 		});
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			return;
 		}
 
-		fetch(`/api/carts/${cartId}/product/${currentProductId}`, {
+		fetch(`/api/carts/${cartId}/products/${currentProductId}`, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({ quantity }),

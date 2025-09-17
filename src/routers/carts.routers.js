@@ -29,7 +29,7 @@ router.get("/:cid", renderCart);
 router.post("/", createCart);
 
 // Agregar producto al carrito
-router.post("/:cid/product/:pid", addProductToCart);
+router.post("/:cid/products/:pid", addProductToCart);
 
 // Actualizar cantidad de un producto específico
 router.put("/:cid/products/:pid", async (req, res) => {

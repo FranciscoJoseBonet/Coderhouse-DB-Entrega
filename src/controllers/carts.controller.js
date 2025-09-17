@@ -36,39 +36,64 @@ export const renderAllCarts = async (req, res) => {
 export const addProductToCart = async (req, res) => {
 	try {
 		const { cid, pid } = req.params;
-		const quantity = Number(req.body.quantity ?? 1);
+		const quantityToAdd = Number(req.body.quantity ?? 1);
 
+		if (quantityToAdd < 1) {
+			return res.status(400).json({ error: "La cantidad debe ser mayor a 0" });
+		}
+
+		// Buscar carrito
 		const cart = await Cart.findById(cid);
 		if (!cart) return res.status(404).json({ error: "Cart not found" });
 
+		// Buscar producto
 		const product = await Product.findById(pid);
 		if (!product) return res.status(404).json({ error: "Product not found" });
 
-		if (product.stock < quantity) {
-			return res.status(400).json({
-				error: `No hay suficiente stock. Stock disponible: ${product.stock}`,
-			});
+		// Buscar producto en el carrito
+		const cartProduct = cart.products.find(
+			(p) => p.product.toString() === product._id.toString()
+		);
+
+		let newQuantityInCart = quantityToAdd;
+
+		if (cartProduct) {
+			// Sumar cantidad al existente
+			newQuantityInCart = cartProduct.quantity + quantityToAdd;
+			if (newQuantityInCart > product.stock) {
+				return res.status(400).json({
+					error: `No hay suficiente stock. Stock disponible: ${
+						product.stock - cartProduct.quantity
+					}`,
+				});
+			}
+			cartProduct.quantity = newQuantityInCart;
+		} else {
+			// Verificar stock antes de agregar
+			if (quantityToAdd > product.stock) {
+				return res.status(400).json({
+					error: `No hay suficiente stock. Stock disponible: ${product.stock}`,
+				});
+			}
+			cart.products.push({ product: product._id, quantity: quantityToAdd });
 		}
 
-		product.stock -= quantity;
+		// Reducir stock del producto
+		product.stock -= quantityToAdd;
 		await product.save();
 
-		const prodIndex = cart.products.findIndex((p) => p.product.equals(product._id));
-		if (prodIndex >= 0) {
-			cart.products[prodIndex].quantity += quantity;
-		} else {
-			cart.products.push({ product: product._id, quantity });
-		}
-
+		// Guardar carrito
 		await cart.save();
 
+		// Devolver carrito poblado
 		const populatedCart = await Cart.findById(cid).populate("products.product").lean();
+
 		res.json(populatedCart);
 	} catch (error) {
+		console.error(error);
 		res.status(500).json({ error: error.message });
 	}
 };
-
 export const removeProductFromCart = async (req, res) => {
 	try {
 		const { cid, pid } = req.params;

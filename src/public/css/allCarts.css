@@ -23,6 +23,14 @@ ul#cartList {
 	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
 }
 
+.cart-body {
+	margin-left: 20px;
+}
+
+.cart-body p {
+	margin-bottom: 10px;
+}
+
 /* Header */
 .cart-header {
 	display: flex;
