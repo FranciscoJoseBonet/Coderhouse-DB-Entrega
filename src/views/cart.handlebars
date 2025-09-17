@@ -2,7 +2,7 @@
 
 {{#if cart}}
 	{{#if cart.products.length}}
-		<ul id="cartList">
+		<ul id="cartList" data-cart-id="{{cart._id}}">
 			{{#each cart.products}}
 				{{#if product}}
 					<li data-product-id="{{product._id}}">
@@ -12,12 +12,11 @@
 						<div>Quantity: {{quantity}}</div>
 						<div>Subtotal: ${{multiply product.price quantity}}</div>
 
-						<div class="actions">
-							<button
-								style="color: #fff; background: #ff1212"
-								onclick="deleteProduct('{{product._id}}')"
-							> Delete Product </button>
-
+						<div class="actions" style="gap: 10px;">
+							<button class="btn-update" style="color: #fff; background: #1279ff">Update
+								Product</button>
+							<button class="btn-delete" style="color: #fff; background: #ff1212">Delete
+								Product</button>
 						</div>
 					</li>
 				{{/if}}
@@ -39,10 +38,4 @@
 <p><a href="/api/carts" class="back-link">Go Back to Carts</a></p>
 
 <link rel="stylesheet" href="/css/cart.css" />
-
-<script>
-	async function deleteProduct(productId) { const res = await fetch(`/api/carts/{{cart._id}}/products/${productId}`,
-	{ method: "DELETE" }); const data = await res.json(); if (data.success) {
-	alert("Producto eliminado correctamente"); location.reload(); } else {
-	alert(data.message || "Error al eliminar el producto"); } }
-</script>
+<script src="/js/cart.js" defer></script>
