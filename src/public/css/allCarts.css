@@ -35,6 +35,7 @@ ul#cartList {
 	margin: 0;
 	font-size: 1.4rem;
 	color: #ffffff;
+	text-align: start;
 }
 .cart-id {
 	font-size: 0.8rem;
