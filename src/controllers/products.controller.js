@@ -1,4 +1,5 @@
 import { getProductsService } from "../services/products.service.js";
+import productModel from "../models/products.model.js";
 
 export const getProducts = async (req, res) => {
 	try {
@@ -28,6 +29,103 @@ export const getProducts = async (req, res) => {
 			prevLink: result.hasPrevPage ? buildLink(result.prevPage) : null,
 			nextLink: result.hasNextPage ? buildLink(result.nextPage) : null,
 		});
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ status: "error", error: error.message });
+	}
+};
+
+export const allProductsJson = async (req, res) => {
+	try {
+		const products = await productModel.find().lean();
+		res.json(products);
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ status: "error", error: error.message });
+	}
+};
+
+export const getProductById = async (req, res) => {
+	try {
+		const { pid } = req.params;
+		console.log(pid);
+		const product = await productModel.findById(pid);
+
+		if (!product) {
+			return res.status(404).json({ status: "error", message: "Producto no encontrado" });
+		}
+
+		res.json(product);
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ status: "error", error: error.message });
+	}
+};
+
+export const createProduct = async (req, res) => {
+	try {
+		const { title, description, code, price, status, stock, category, thumbnails } =
+			req.body;
+
+		if (!title || !code || !price || stock == null || !category) {
+			return res
+				.status(400)
+				.json({ status: "error", message: "Faltan campos obligatorios" });
+		}
+
+		const newProduct = await productModel.create({
+			title,
+			description,
+			code,
+			price,
+			status,
+			stock,
+			category,
+			thumbnails: thumbnails || [],
+		});
+
+		res.status(201).json({ status: "success", payload: newProduct });
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ status: "error", error: error.message });
+	}
+};
+
+export const updateProduct = async (req, res) => {
+	try {
+		const { pid } = req.params;
+		const updateData = { ...req.body };
+
+		delete updateData._id;
+		delete updateData.id;
+
+		const updatedProduct = await productModel.findByIdAndUpdate(pid, updateData, {
+			new: true,
+			runValidators: true,
+		});
+
+		if (!updatedProduct) {
+			return res.status(404).json({ status: "error", message: "Producto no encontrado" });
+		}
+
+		res.json({ status: "success", payload: updatedProduct });
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ status: "error", error: error.message });
+	}
+};
+
+export const deleteProduct = async (req, res) => {
+	try {
+		const { pid } = req.params;
+
+		const deletedProduct = await productModel.findByIdAndDelete(pid);
+
+		if (!deletedProduct) {
+			return res.status(404).json({ status: "error", message: "Producto no encontrado" });
+		}
+
+		res.json({ status: "success", message: "Producto eliminado correctamente" });
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ status: "error", error: error.message });
