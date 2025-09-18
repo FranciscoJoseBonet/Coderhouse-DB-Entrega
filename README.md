@@ -31,7 +31,7 @@ npm install
 
 ```js
 mongoose.connect(
-	"mongodb+srv://<usuario>:<password>@<cluster>/<dbname>?retryWrites=true&w=majority"
+	"mongodb+srv://francisco:contrasenia123@cluster0.kzbq1pi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 );
 ```
 
