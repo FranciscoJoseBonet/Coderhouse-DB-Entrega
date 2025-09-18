@@ -1,4 +1,3 @@
-import { getCartByIdService } from "../services/carts.service.js";
 import Cart from "../models/carts.model.js";
 import Product from "../models/products.model.js";
 
@@ -9,37 +8,6 @@ export const getCarts = async (req, res) => {
 	} catch (err) {
 		console.error(err);
 		res.status(500).json({ error: "Error al obtener los carritos" });
-	}
-};
-
-export const renderCart = async (req, res) => {
-	try {
-		const { cid } = req.params;
-		const cart = await getCartByIdService(cid, true);
-
-		if (!cart) {
-			return res.status(404).render("cart", { cart: null, total: 0 });
-		}
-
-		const total = cart.products.reduce((acc, item) => {
-			if (!item.product) return acc;
-			const price = Number(item.product.price) || 0;
-			return acc + price * item.quantity;
-		}, 0);
-		res.render("cart", { cart, total });
-	} catch (error) {
-		console.error(error);
-		res.status(500).send("Error al renderizar el carrito: " + error.message);
-	}
-};
-
-export const renderAllCarts = async (req, res) => {
-	try {
-		const carts = await Cart.find().populate("products.product").lean();
-		res.render("allCarts", { carts });
-	} catch (error) {
-		console.error(error);
-		res.status(500).send("Error al renderizar todos los carritos: " + error.message);
 	}
 };
 

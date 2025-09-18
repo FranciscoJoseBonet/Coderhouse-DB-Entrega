@@ -1,8 +1,6 @@
 import { Router } from "express";
 import {
 	addProductToCart,
-	renderCart,
-	renderAllCarts,
 	removeProductFromCart,
 	createCart,
 	updateProductQuantity,
@@ -15,12 +13,6 @@ import Cart from "../models/carts.model.js";
 const router = Router();
 
 router.get("/", getCarts);
-
-// Vista de todos los carritos
-router.get("/cart-view", renderAllCarts);
-
-// Vista de un carrito específico
-router.get("/:cid", renderCart);
 
 // Crear un carrito vacío
 router.post("/", createCart);
