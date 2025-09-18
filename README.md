@@ -1,7 +1,7 @@
+---
 # 🛠️ API de Productos y Carritos
 
 Esta API permite gestionar productos y carritos de compra utilizando Node.js, Express y MongoDB (a través de Mongoose). Incluye vistas dinámicas con Handlebars y una vista en tiempo real de productos usando WebSocket (Socket.io).
-
 ---
 
 ## 📋 Requisitos Previos
@@ -16,37 +16,34 @@ Esta API permite gestionar productos y carritos de compra utilizando Node.js, Ex
 
 1. Clona este repositorio:
 
-   ```bash
-   git clone <url-del-repositorio>
-   cd <nombre-del-proyecto>
-   ```
+```bash
+git clone <url-del-repositorio>
+cd <nombre-del-proyecto>
+```
 
 2. Instala las dependencias necesarias:
 
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+```
 
 3. Configura tu cadena de conexión a MongoDB en `src/app.js`:
 
-   ```js
-   mongoose.connect(
-   	"mongodb+srv://<usuario>:<password>@<cluster>/<dbname>?retryWrites=true&w=majority"
-   );
-   ```
+```js
+mongoose.connect(
+	"mongodb+srv://<usuario>:<password>@<cluster>/<dbname>?retryWrites=true&w=majority"
+);
+```
 
 ---
 
 ## 🚀 Ejecución del Servidor
 
-Para iniciar el servidor:
-
 ```bash
 npm run dev
 ```
 
-> El servidor quedará escuchando en:
-> **http://localhost:8080**
+> El servidor quedará escuchando en: **[http://localhost:8080](http://localhost:8080)**
 
 ---
 
@@ -84,19 +81,19 @@ npm run dev
 
 ---
 
-## 🧠 Descripción General
+## 🧠 Endpoints
 
 ### 📁 Productos
 
 **Base URL:** `/api/products`
 
-| Método | Ruta               | Descripción                                          |
-| ------ | ------------------ | ---------------------------------------------------- |
-| GET    | /api/products      | Obtiene todos los productos (paginados y filtrables) |
-| POST   | /api/products      | Crea un nuevo producto                               |
-| GET    | /api/products/:pid | Obtiene un producto por ID                           |
-| PUT    | /api/products/:pid | Actualiza un producto por ID                         |
-| DELETE | /api/products/:pid | Elimina un producto por ID                           |
+| Método | Ruta                | Descripción                                                          |
+| ------ | ------------------- | -------------------------------------------------------------------- |
+| GET    | /api/products       | Obtiene todos los productos en formato JSON (paginados y filtrables) |
+| GET    | /api/products/\:pid | Obtiene un producto específico por ID                                |
+| POST   | /api/products       | Crea un nuevo producto                                               |
+| PUT    | /api/products/\:pid | Actualiza un producto por ID                                         |
+| DELETE | /api/products/\:pid | Elimina un producto por ID                                           |
 
 #### 💡 Ejemplo de Body para POST `/api/products`
 
@@ -118,42 +115,48 @@ npm run dev
 
 **Base URL:** `/api/carts`
 
-| Método | Ruta                          | Descripción                                            |
-| ------ | ----------------------------- | ------------------------------------------------------ |
-| GET    | /api/carts                    | Obtiene todos los carritos                             |
-| POST   | /api/carts                    | Crea un nuevo carrito vacío                            |
-| GET    | /api/carts/:cid               | Obtiene un carrito específico por ID (renderiza vista) |
-| POST   | /api/carts/:cid/products/:pid | Agrega un producto al carrito (o incrementa)           |
-| PUT    | /api/carts/:cid/products/:pid | Actualiza cantidad de un producto en el carrito        |
-| DELETE | /api/carts/:cid/products/:pid | Elimina un producto del carrito                        |
-| DELETE | /api/carts/:cid/empty         | Vacía el carrito completo                              |
-| DELETE | /api/carts/:cid               | Elimina el carrito                                     |
+| Método | Ruta                  | Descripción                                                            |
+| ------ | --------------------- | ---------------------------------------------------------------------- |
+| GET    | /api/carts            | Obtiene todos los carritos                                             |
+| POST   | /api/carts            | Crea un nuevo carrito vacío                                            |
+| GET    | /\:cid                | Renderiza la vista del carrito específico                              |
+| POST   | /\:cid/products/\:pid | Agrega un producto al carrito o incrementa su cantidad                 |
+| PUT    | /\:cid/products/\:pid | Actualiza la cantidad de un producto específico                        |
+| PUT    | /\:cid                | Actualiza todos los productos del carrito (reemplaza arreglo completo) |
+| DELETE | /\:cid/products/\:pid | Elimina un producto específico del carrito                             |
+| DELETE | /\:cid/empty          | Vacía el carrito completo                                              |
+| DELETE | /\:cid                | Elimina el carrito completo                                            |
+
+#### 💡 Ejemplo de Body para PUT `/api/carts/:cid`
+
+```json
+{
+	"products": [
+		{ "productId": "64f1a0c5d2b9c8e5f1234567", "quantity": 2 },
+		{ "productId": "64f1a0c5d2b9c8e5f7654321", "quantity": 1 }
+	]
+}
+```
 
 ---
 
 ## 🖥️ Vistas con Handlebars
 
-- `/`  
-  Muestra la lista de productos con filtros y paginación (`home.handlebars`).
-
-- `/realtimeproducts`  
-  Vista en tiempo real de productos. Permite agregar, eliminar y paginar productos usando formularios y actualiza la lista automáticamente mediante WebSocket (`realTimeProducts.handlebars`).
-
-- `/api/carts/cart-view`  
-  Muestra todos los carritos (`allCarts.handlebars`).
-
-- `/api/carts/:cid`  
-  Muestra el detalle de un carrito específico (`cart.handlebars`).
+| Ruta                | Vista                       | Descripción                                                          |
+| ------------------- | --------------------------- | -------------------------------------------------------------------- |
+| `/`                 | home.handlebars             | Lista de productos en formato JSON (usado para filtros y paginación) |
+| `/home`             | home.handlebars             | Renderiza la lista de productos con filtros y paginación             |
+| `/realtimeproducts` | realTimeProducts.handlebars | Vista de productos en tiempo real usando WebSocket                   |
+| `/cartsList`        | allCarts.handlebars         | Lista de todos los carritos                                          |
+| `/:cid`             | cart.handlebars             | Detalle de un carrito específico                                     |
 
 ---
 
 ## 🔄 Productos en Tiempo Real (WebSocket)
 
-La vista `/realtimeproducts` utiliza Socket.io para mostrar la lista de productos en tiempo real.
-
-- Al agregar, eliminar o paginar productos desde el formulario, la lista se actualiza automáticamente para todos los clientes conectados.
-- El frontend se comunica con el backend mediante eventos de WebSocket definidos en `public/js/realTimeScript.js`.
-- El backend utiliza los servicios y controladores para obtener los productos paginados y filtrados.
+- La vista `/realtimeproducts` permite agregar, eliminar y paginar productos con actualización instantánea.
+- El frontend se comunica con el backend mediante eventos de Socket.io definidos en `public/js/realTimeScript.js`.
+- El backend utiliza los servicios y controladores para manejar los productos de manera dinámica.
 
 ---
 
@@ -163,13 +166,25 @@ La vista `/realtimeproducts` utiliza Socket.io para mostrar la lista de producto
 
 - **Método:** POST
 - **URL:** `http://localhost:8080/api/products`
-- **Body:** (formato JSON como el anterior)
+- **Body:** JSON como se mostró anteriormente
 
 ### Crear un nuevo carrito
 
 - **Método:** POST
 - **URL:** `http://localhost:8080/api/carts`
 - **Body:** `{}`
+
+### Agregar un producto a un carrito
+
+- **Método:** POST
+- **URL:** `http://localhost:8080/api/carts/:cid/products/:pid`
+- **Body:** `{ "quantity": 1 }` (opcional, por defecto incrementa en 1)
+
+### Actualizar todos los productos del carrito
+
+- **Método:** PUT
+- **URL:** `http://localhost:8080/api/carts/:cid`
+- **Body:** Arreglo de productos con `productId` y `quantity`
 
 ---
 
