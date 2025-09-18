@@ -33,16 +33,23 @@
 <div class="pagination">
   {{#if (gt page 1)}}
     <a href="?page={{subtract page 1}}&query={{filters.query}}&minPrice={{filters.minPrice}}&maxPrice={{filters.maxPrice}}&sort={{filters.sort}}">
-      Previous
+      &laquo; Previous
     </a>
+  {{else}}
+    <div class="placeholder">&laquo; Previous</div>
   {{/if}}
+
   <span>Page {{page}} of {{totalPages}}</span>
+
   {{#if (lt page totalPages)}}
     <a href="?page={{add page 1}}&query={{filters.query}}&minPrice={{filters.minPrice}}&maxPrice={{filters.maxPrice}}&sort={{filters.sort}}">
-      Next
+      Next &raquo;
     </a>
+  {{else}}
+    <div class="placeholder">Next &raquo;</div>
   {{/if}}
 </div>
+
 
 {{else}}
 <p>No products available.</p>

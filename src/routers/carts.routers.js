@@ -7,8 +7,8 @@ import {
 	emptyCart,
 	deleteCart,
 	getCarts,
+	updateCartProducts,
 } from "../controllers/carts.controller.js";
-import Cart from "../models/carts.model.js";
 
 const router = Router();
 
@@ -33,22 +33,6 @@ router.delete("/:cid/empty", emptyCart);
 router.delete("/:cid", deleteCart);
 
 // Actualizar todos los productos de un carrito
-router.put("/:cid", async (req, res) => {
-	try {
-		const { products } = req.body;
-		const cart = await Cart.findById(req.params.cid);
-		if (!cart) return res.status(404).json({ error: "Cart not found" });
-
-		cart.products = products.map((p) => ({ product: p.product, quantity: p.quantity }));
-		await cart.save();
-
-		const populatedCart = await Cart.findById(req.params.cid)
-			.populate("products.product")
-			.lean();
-		res.json(populatedCart);
-	} catch (error) {
-		res.status(500).json({ error: error.message });
-	}
-});
+router.put("/:cid", updateCartProducts);
 
 export default router;

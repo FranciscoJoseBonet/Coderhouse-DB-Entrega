@@ -104,28 +104,44 @@ p {
 }
 
 .pagination {
-	text-align: center;
-	margin-top: 25px;
 	display: flex;
 	justify-content: center;
-	gap: 10px;
+	align-items: center;
+	gap: 12px;
+	margin-top: 30px;
+	font-size: 0.95rem;
 }
 
-.pagination a {
-	padding: 8px 12px;
-	border-radius: 6px;
+.pagination a,
+.pagination .placeholder {
+	min-width: 95px;
+	padding: 8px 14px;
+	text-align: center;
+	border-radius: 8px;
 	border: 1px solid #3498db;
 	color: #3498db;
-	text-decoration: none;
 	font-weight: 600;
-	transition: all 0.2s ease;
-}
-.pagination a:hover {
-	background: #3498db;
-	color: white;
+	background: #fff;
+	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+	transition: all 0.25s ease;
+	margin-top: 0;
 }
 
-/* Modal mejorado */
+.pagination a:hover {
+	background: #3498db;
+	color: #fff;
+	transform: translateY(-2px);
+	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.pagination .placeholder {
+	background: transparent;
+	border-color: #bdc3c7;
+	box-shadow: none;
+	color: #bdc3c7;
+	cursor: default;
+}
+
 .modal {
 	display: none;
 	position: fixed;
@@ -213,4 +229,10 @@ p {
 	color: red;
 	margin-top: 10px;
 	font-size: 0.9rem;
+}
+
+.btn-add-cart {
+	display: flex;
+	position: absolute;
+	margin-top: 18px;
 }

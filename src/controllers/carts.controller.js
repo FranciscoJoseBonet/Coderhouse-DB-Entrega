@@ -20,15 +20,12 @@ export const addProductToCart = async (req, res) => {
 			return res.status(400).json({ error: "La cantidad debe ser mayor a 0" });
 		}
 
-		// Buscar carrito
 		const cart = await Cart.findById(cid);
 		if (!cart) return res.status(404).json({ error: "Cart not found" });
 
-		// Buscar producto
 		const product = await Product.findById(pid);
 		if (!product) return res.status(404).json({ error: "Product not found" });
 
-		// Buscar producto en el carrito
 		const cartProduct = cart.products.find(
 			(p) => p.product.toString() === product._id.toString()
 		);
@@ -36,7 +33,6 @@ export const addProductToCart = async (req, res) => {
 		let newQuantityInCart = quantityToAdd;
 
 		if (cartProduct) {
-			// Sumar cantidad al existente
 			newQuantityInCart = cartProduct.quantity + quantityToAdd;
 			if (newQuantityInCart > product.stock) {
 				return res.status(400).json({
@@ -47,7 +43,6 @@ export const addProductToCart = async (req, res) => {
 			}
 			cartProduct.quantity = newQuantityInCart;
 		} else {
-			// Verificar stock antes de agregar
 			if (quantityToAdd > product.stock) {
 				return res.status(400).json({
 					error: `No hay suficiente stock. Stock disponible: ${product.stock}`,
@@ -56,14 +51,11 @@ export const addProductToCart = async (req, res) => {
 			cart.products.push({ product: product._id, quantity: quantityToAdd });
 		}
 
-		// Reducir stock del producto
 		product.stock -= quantityToAdd;
-		await product.save();
 
-		// Guardar carrito
+		await product.save();
 		await cart.save();
 
-		// Devolver carrito poblado
 		const populatedCart = await Cart.findById(cid).populate("products.product").lean();
 
 		res.json(populatedCart);
@@ -72,23 +64,26 @@ export const addProductToCart = async (req, res) => {
 		res.status(500).json({ error: error.message });
 	}
 };
+
 export const removeProductFromCart = async (req, res) => {
 	try {
 		const { cid, pid } = req.params;
 
-		const cart = await Cart.findById(cid);
+		const cart = await Cart.findById(cid).populate("products.product");
 		if (!cart) return res.status(404).json({ success: false, message: "Cart not found" });
 
-		// Buscar índice del producto en el carrito
 		const productIndex = cart.products.findIndex(
-			(item) => item.product.toString() === pid
+			(item) => item.product._id.toString() === pid
 		);
-
 		if (productIndex === -1) {
 			return res.status(404).json({ success: false, message: "Product not in cart" });
 		}
 
-		// Eliminar el producto
+		const cartItem = cart.products[productIndex];
+		const productInDB = await Product.findById(pid);
+		productInDB.stock += cartItem.quantity;
+		await productInDB.save();
+
 		cart.products.splice(productIndex, 1);
 		await cart.save();
 
@@ -128,23 +123,36 @@ export const createCart = async (req, res) => {
 export const updateProductQuantity = async (req, res) => {
 	try {
 		const { quantity } = req.body;
-		const cart = await Cart.findById(req.params.cid);
+		const { cid, pid } = req.params;
+
+		const cart = await Cart.findById(cid).populate("products.product");
 		if (!cart) return res.status(404).json({ error: "Cart not found" });
 
-		const prodIndex = cart.products.findIndex((p) => p.product.equals(req.params.pid));
-		if (prodIndex >= 0) {
-			cart.products[prodIndex].quantity = Number(quantity);
-		} else {
-			return res.status(404).json({ error: "Product not in cart" });
+		const prodIndex = cart.products.findIndex((p) => p.product._id.toString() === pid);
+		if (prodIndex === -1) return res.status(404).json({ error: "Product not in cart" });
+
+		const cartItem = cart.products[prodIndex];
+		const productInDB = await Product.findById(pid);
+
+		const diff = quantity - cartItem.quantity;
+
+		if (diff > 0 && diff > productInDB.stock) {
+			return res.status(400).json({
+				error: `No hay suficiente stock para ${productInDB.title}. Disponible: ${productInDB.stock}`,
+			});
 		}
 
+		productInDB.stock -= diff;
+		await productInDB.save();
+
+		cart.products[prodIndex].quantity = quantity;
 		await cart.save();
 
-		const populatedCart = await Cart.findById(req.params.cid)
-			.populate("products.product")
-			.lean();
+		const populatedCart = await Cart.findById(cid).populate("products.product").lean();
+
 		res.json(populatedCart);
 	} catch (error) {
+		console.error(error);
 		res.status(500).json({ error: error.message });
 	}
 };
@@ -169,6 +177,58 @@ export const deleteCart = async (req, res) => {
 
 		res.json({ success: true });
 	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
+};
+
+export const updateCartProducts = async (req, res) => {
+	try {
+		const { cid } = req.params;
+		const { products } = req.body;
+
+		if (!Array.isArray(products)) {
+			return res.status(400).json({ error: "Products must be an array" });
+		}
+
+		const cart = await Cart.findById(cid).populate("products.product");
+		if (!cart) return res.status(404).json({ error: "Cart not found" });
+
+		const currentProductsMap = new Map();
+		cart.products.forEach((p) => {
+			currentProductsMap.set(p.product._id.toString(), p.quantity);
+		});
+
+		for (const item of products) {
+			if (!item.product || item.quantity < 1) {
+				return res.status(400).json({ error: "Invalid product or quantity" });
+			}
+
+			const productInDB = await Product.findById(item.product);
+			if (!productInDB) {
+				return res.status(404).json({ error: `Product not found: ${item.product}` });
+			}
+
+			const oldQty = currentProductsMap.get(item.product) || 0;
+			const diff = item.quantity - oldQty; // diferencia a ajustar en stock
+
+			if (diff > 0 && diff > productInDB.stock) {
+				return res.status(400).json({
+					error: `Not enough stock for product ${productInDB.title}. Available: ${productInDB.stock}`,
+				});
+			}
+
+			productInDB.stock -= diff;
+			await productInDB.save();
+		}
+
+		cart.products = products.map((p) => ({ product: p.product, quantity: p.quantity }));
+		await cart.save();
+
+		const populatedCart = await Cart.findById(cid).populate("products.product").lean();
+
+		res.json(populatedCart);
+	} catch (error) {
+		console.error(error);
 		res.status(500).json({ error: error.message });
 	}
 };
