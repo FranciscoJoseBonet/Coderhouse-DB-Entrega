@@ -37,5 +37,5 @@ io.on("connection", async (socket) => {
 
 const port = process.env.PORT || 8080;
 httpServer.listen(port, () => {
-	console.log(`Server running at http://localhost:${port}`);
+	console.log(`Server running at http://localhost:${port}/home`);
 });

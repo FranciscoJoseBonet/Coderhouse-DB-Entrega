@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 
 import productsRouter from "./routers/products.routers.js";
 import cartsRouter from "./routers/carts.routers.js";
+import viewsRouter from "./routers/views.routers.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -46,9 +47,9 @@ app.set("view engine", "handlebars");
 app.set("views", path.join(__dirname, "views"));
 
 // Routers
+app.use("/", viewsRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
-app.use("/", productsRouter);
 
 // 404
 app.use((req, res) => {

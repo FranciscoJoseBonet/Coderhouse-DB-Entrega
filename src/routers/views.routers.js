@@ -1,9 +1,13 @@
 import { Router } from "express";
-import { showRealTime } from "../controllers/views.controller.js";
+import { getProducts } from "../controllers/products.controller.js";
+import { showRealTime, renderHome } from "../controllers/views.controller.js";
 
-export function createViewsRouter() {
-	const router = Router();
-	router.get("/realtimeproducts", showRealTime);
+const router = Router();
 
-	return router;
-}
+router.get("/", getProducts);
+
+router.get("/realtimeproducts", showRealTime);
+
+router.get("/home", renderHome);
+
+export default router;

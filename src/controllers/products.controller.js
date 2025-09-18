@@ -33,20 +33,3 @@ export const getProducts = async (req, res) => {
 		res.status(500).json({ status: "error", error: error.message });
 	}
 };
-
-export const renderHome = async (req, res) => {
-	try {
-		const result = await getProductsService(req.query);
-
-		res.render("home", {
-			title: "Home",
-			products: result.products,
-			filters: result.filters,
-			page: result.page,
-			totalPages: result.totalPages,
-		});
-	} catch (error) {
-		console.error(error);
-		res.status(500).send("Error al renderizar la página: " + error.message);
-	}
-};
